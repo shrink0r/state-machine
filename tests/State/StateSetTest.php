@@ -22,40 +22,40 @@ final class StateSetTest extends TestCase
 {
     public function testCount()
     {
-        $state_set = new StateSet($this->buildStateArray());
-        $this->assertCount(5, $state_set);
+        $stateSet = new StateSet($this->buildStateArray());
+        $this->assertCount(5, $stateSet);
     }
 
     public function testSplat()
     {
-        $state_set = new StateSet($this->buildStateArray());
-        list($initial_state, $all_states, $final_states) = $state_set->splat();
-        $this->assertInstanceOf(StateInterface::CLASS, $initial_state);
-        $this->assertTrue($initial_state->isInitial());
-        $this->assertCount(5, $all_states);
-        $this->assertInstanceOf(StateMap::CLASS, $all_states);
-        $this->assertCount(1, $final_states);
-        $this->assertInstanceOf(StateMap::CLASS, $final_states);
-        $this->assertTrue($final_states->get('final')->isFinal());
+        $stateSet = new StateSet($this->buildStateArray());
+        list($initialState, $allStates, $finalStates) = $stateSet->splat();
+        $this->assertInstanceOf(StateInterface::CLASS, $initialState);
+        $this->assertTrue($initialState->isInitial());
+        $this->assertCount(5, $allStates);
+        $this->assertInstanceOf(StateMap::CLASS, $allStates);
+        $this->assertCount(1, $finalStates);
+        $this->assertInstanceOf(StateMap::CLASS, $finalStates);
+        $this->assertTrue($finalStates->get('final')->isFinal());
     }
 
     public function testGetIterator()
     {
-        $states_array = $this->buildStateArray();
-        $state_set = new StateSet($states_array);
+        $statesArray = $this->buildStateArray();
+        $stateSet = new StateSet($statesArray);
         $i = 0;
-        foreach ($state_set as $state) {
-            $this->assertEquals($states_array[$i], $state);
+        foreach ($stateSet as $state) {
+            $this->assertEquals($statesArray[$i], $state);
             $i++;
         }
-        $this->assertEquals(count($states_array), $i);
+        $this->assertEquals(count($statesArray), $i);
     }
 
     public function testToArray()
     {
-        $states_array = $this->buildStateArray();
-        $state_set = new StateSet($states_array);
-        $this->assertEquals($states_array, $state_set->toArray());
+        $statesArray = $this->buildStateArray();
+        $stateSet = new StateSet($statesArray);
+        $this->assertEquals($statesArray, $stateSet->toArray());
     }
 
     /**
@@ -64,10 +64,10 @@ final class StateSetTest extends TestCase
      */
     public function testMultipleInitialStates()
     {
-        $states_array = $this->buildStateArray();
-        $states_array[] = $this->createState('snafu', InitialState::CLASS);
-        $state_set = new StateSet($states_array);
-        $state_set->splat();
+        $statesArray = $this->buildStateArray();
+        $statesArray[] = $this->createState('snafu', InitialState::CLASS);
+        $stateSet = new StateSet($statesArray);
+        $stateSet->splat();
     } // @codeCoverageIgnore
 
     /**
@@ -76,34 +76,34 @@ final class StateSetTest extends TestCase
      */
     public function testInconsistentType()
     {
-        $states_array = $this->buildStateArray();
-        $states_array[] = $this->createState('snafu', TwoFaceState::CLASS);
-        $state_set = new StateSet($states_array);
-        $state_set->splat();
+        $statesArray = $this->buildStateArray();
+        $statesArray[] = $this->createState('snafu', TwoFaceState::CLASS);
+        $stateSet = new StateSet($statesArray);
+        $stateSet->splat();
     } // @codeCoverageIgnore
 
     /**
      * @expectedException Daikon\StateMachine\Error\InvalidStructure
-     * @expectedExceptionMessage Trying to create statemachine without an initial state.
+     * @expectedExceptionMessage Trying to create state-machine without an initial state.
      */
     public function testMissingInitialState()
     {
-        $states_array = $this->buildStateArray();
-        array_shift($states_array);
-        $state_set = new StateSet($states_array);
-        $state_set->splat();
+        $statesArray = $this->buildStateArray();
+        array_shift($statesArray);
+        $stateSet = new StateSet($statesArray);
+        $stateSet->splat();
     } // @codeCoverageIgnore
 
     /**
      * @expectedException Daikon\StateMachine\Error\InvalidStructure
-     * @expectedExceptionMessage Trying to create statemachine without at least one final state.
+     * @expectedExceptionMessage Trying to create state-machine without at least one final state.
      */
     public function testMissingFinalState()
     {
-        $states_array = $this->buildStateArray();
-        array_pop($states_array);
-        $state_set = new StateSet($states_array);
-        $state_set->splat();
+        $statesArray = $this->buildStateArray();
+        array_pop($statesArray);
+        $stateSet = new StateSet($statesArray);
+        $stateSet->splat();
     } // @codeCoverageIgnore
 
     private function buildStateArray()

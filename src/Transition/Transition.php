@@ -14,8 +14,6 @@ use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\OutputInterface;
 use Daikon\StateMachine\Param\ParamHolderInterface;
 use Daikon\StateMachine\Param\Settings;
-use Daikon\StateMachine\Transition\ConstraintInterface;
-use Daikon\StateMachine\Transition\TransitionInterface;
 
 final class Transition implements TransitionInterface
 {

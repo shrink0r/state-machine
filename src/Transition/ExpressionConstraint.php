@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Transition;
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\OutputInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ExpressionConstraint implements ConstraintInterface
 {

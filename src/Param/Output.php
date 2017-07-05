@@ -10,58 +10,33 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Param;
 
-use Daikon\StateMachine\Param\InputInterface;
-use Daikon\StateMachine\Param\OutputInterface;
-use Daikon\StateMachine\Param\ParamHolderTrait;
-
 final class Output implements OutputInterface
 {
     use ParamHolderTrait;
 
-    /**
-     * @param string $current_state
-     */
-    private $current_state;
+    private $currentState;
 
-    /**
-     * @param string $current_state
-     * @param mixed[] $params
-     */
-    public function __construct(string $current_state, array $params = [])
+    public function __construct(string $currentState, array $params = [])
     {
-        $this->current_state = $current_state;
+        $this->currentState = $currentState;
         $this->params = $params;
     }
 
-    /**
-     * @return string
-     */
     public function getCurrentState(): string
     {
-        return $this->current_state;
+        return $this->currentState;
     }
 
-    /**
-     * @param  string $current_state
-     *
-     * @return OutputInterface
-     */
-    public function withCurrentState(string $current_state): OutputInterface
+    public function withCurrentState(string $currentState): OutputInterface
     {
         $output = clone $this;
-        $output->current_state = $current_state;
+        $output->currentState = $currentState;
         return $output;
     }
 
-    /**
-     * @param string $current_state
-     * @param InputInterface $input
-     *
-     * @return OutputInterface
-     */
-    public static function fromInput(string $current_state, InputInterface $input): OutputInterface
+    public static function fromInput(string $currentState, InputInterface $input): OutputInterface
     {
-        return new static($current_state, $input->toArray());
+        return new static($currentState, $input->toArray());
     }
 
     /**
@@ -69,6 +44,6 @@ final class Output implements OutputInterface
      */
     public function toArray(): array
     {
-        return [ 'params' => $this->params, 'current_state' => $this->current_state ];
+        return [ 'params' => $this->params, 'current_state' => $this->currentState ];
     }
 }

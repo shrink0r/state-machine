@@ -28,5 +28,5 @@ interface StateMachineInterface
 
     public function getStateTransitions(): StateTransitions;
 
-    public function execute(InputInterface $input, string $start_state = null): OutputInterface;
+    public function execute(InputInterface $input, string $startState = null): OutputInterface;
 }

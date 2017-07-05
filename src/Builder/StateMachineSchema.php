@@ -18,11 +18,11 @@ use Shrink0r\PhpSchema\SchemaInterface;
 
 final class StateMachineSchema implements SchemaInterface
 {
-    private $internal_schema;
+    private $internalSchema;
 
     public function __construct()
     {
-        $this->internal_schema = new Schema('statemachine', [
+        $this->internalSchema = new Schema('state-machine', [
             'type' => 'assoc',
             'properties' => [
                 "name" => [ "type" => "string" ],
@@ -38,32 +38,32 @@ final class StateMachineSchema implements SchemaInterface
 
     public function validate(array $data): ResultInterface
     {
-        return $this->internal_schema->validate($data);
+        return $this->internalSchema->validate($data);
     }
 
     public function getName(): string
     {
-        return $this->internal_schema->getName();
+        return $this->internalSchema->getName();
     }
 
     public function getType(): string
     {
-        return $this->internal_schema->getType();
+        return $this->internalSchema->getType();
     }
 
     public function getCustomTypes(): array
     {
-        return $this->internal_schema->getCustomTypes();
+        return $this->internalSchema->getCustomTypes();
     }
 
     public function getProperties(): array
     {
-        return $this->internal_schema->getProperties();
+        return $this->internalSchema->getProperties();
     }
 
     public function getFactory(): FactoryInterface
     {
-        return $this->internal_schema->getFactory();
+        return $this->internalSchema->getFactory();
     }
 
     private function getStateSchema(): array

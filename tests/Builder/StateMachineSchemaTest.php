@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Tests\Builder;
 
-use Shrink0r\PhpSchema\FactoryInterface;
 use Daikon\StateMachine\Builder\StateMachineSchema;
 use Daikon\StateMachine\Tests\TestCase;
+use Shrink0r\PhpSchema\FactoryInterface;
 
 final class StateMachineSchemaTest extends TestCase
 {
     public function testGetName()
     {
         $schema = new StateMachineSchema;
-        $this->assertEquals('statemachine', $schema->getName());
+        $this->assertEquals('state-machine', $schema->getName());
     }
 
     public function testGetType()

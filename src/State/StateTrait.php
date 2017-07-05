@@ -10,13 +10,12 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\State;
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Daikon\StateMachine\Error\ConfigError;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\Output;
 use Daikon\StateMachine\Param\OutputInterface;
 use Daikon\StateMachine\Param\ParamHolderInterface;
-use Daikon\StateMachine\State\ValidatorInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 trait StateTrait
 {
@@ -26,21 +25,21 @@ trait StateTrait
 
     private $validator;
 
-    private $expression_engine;
+    private $expressionEngine;
 
     public function __construct(
         string $name,
         ParamHolderInterface $settings,
         ValidatorInterface $validator,
-        ExpressionLanguage $expression_engine
+        ExpressionLanguage $expressionEngine
     ) {
         $this->name = $name;
         $this->settings = $settings;
         $this->validator = $validator;
-        $this->expression_engine = $expression_engine;
-        foreach ($this->getRequiredSettings() as $setting_name) {
-            if (!$this->settings->has($setting_name)) {
-                throw new ConfigError("Trying to configure state '$name' without required setting '$setting_name'.");
+        $this->expressionEngine = $expressionEngine;
+        foreach ($this->getRequiredSettings() as $settingName) {
+            if (!$this->settings->has($settingName)) {
+                throw new ConfigError("Trying to configure state '$name' without required setting '$settingName'.");
             }
         }
     }
@@ -103,7 +102,7 @@ trait StateTrait
     {
         $exports = [];
         foreach ($this->getSetting('_output', []) as $key => $value) {
-            $exports[$key] = $this->expression_engine->evaluate($value, [ 'input' => $input ]);
+            $exports[$key] = $this->expressionEngine->evaluate($value, [ 'input' => $input ]);
         }
         return $exports;
     }

@@ -10,13 +10,11 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Builder;
 
-use Shrink0r\Monatic\Maybe;
-use Shrink0r\PhpSchema\Error;
-use Daikon\StateMachine\Builder\Factory;
-use Daikon\StateMachine\Builder\StateMachineBuilderInterface;
 use Daikon\StateMachine\Error\ConfigError;
 use Daikon\StateMachine\StateMachine;
 use Daikon\StateMachine\StateMachineInterface;
+use Shrink0r\Monatic\Maybe;
+use Shrink0r\PhpSchema\Error;
 
 final class ArrayStateMachineBuilder implements StateMachineBuilderInterface
 {
@@ -35,11 +33,11 @@ final class ArrayStateMachineBuilder implements StateMachineBuilderInterface
         $data = $this->config;
         $result = (new StateMachineSchema)->validate($data);
         if ($result instanceof Error) {
-            throw new ConfigError('Invalid statemachine configuration given: '.print_r($result->unwrap(), true));
+            throw new ConfigError('Invalid state-machine configuration given: '.print_r($result->unwrap(), true));
         }
         list($states, $transitions) = $this->realizeConfig($data['states']);
-        $state_machine_class = Maybe::unit($this->config)->class->get() ?? StateMachine::CLASS;
-        return (new StateMachineBuilder($state_machine_class))
+        $stateMachineClass = Maybe::unit($this->config)->class->get() ?? StateMachine::CLASS;
+        return (new StateMachineBuilder($stateMachineClass))
             ->addStateMachineName($data['name'])
             ->addStates($states)
             ->addTransitions($transitions)
@@ -50,16 +48,16 @@ final class ArrayStateMachineBuilder implements StateMachineBuilderInterface
     {
         $states = [];
         $transitions = [];
-        foreach ($config as $name => $state_config) {
-            $states[] = $this->factory->createState($name, $state_config);
-            if (!is_array($state_config)) {
+        foreach ($config as $name => $stateConfig) {
+            $states[] = $this->factory->createState($name, $stateConfig);
+            if (!is_array($stateConfig)) {
                 continue;
             }
-            foreach ($state_config['transitions'] as $key => $transition_config) {
-                if (is_string($transition_config)) {
-                    $transition_config = [ 'when' => $transition_config ];
+            foreach ($stateConfig['transitions'] as $key => $transitionConfig) {
+                if (is_string($transitionConfig)) {
+                    $transitionConfig = [ 'when' => $transitionConfig ];
                 }
-                $transitions[] = $this->factory->createTransition($name, $key, $transition_config);
+                $transitions[] = $this->factory->createTransition($name, $key, $transitionConfig);
             }
         }
         return [ $states, $transitions ];

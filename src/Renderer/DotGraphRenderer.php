@@ -10,52 +10,51 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Renderer;
 
-use Ds\Map;
-use Daikon\StateMachine\Renderer\RendererInterface;
 use Daikon\StateMachine\StateMachineInterface;
+use Ds\Map;
 
 final class DotGraphRenderer implements RendererInterface
 {
-    public function render(StateMachineInterface $state_machine)
+    public function render(StateMachineInterface $stateMachine)
     {
-        $node_id = 0;
-        $node_id_map = new Map;
-        foreach ($state_machine->getStates() as $state) {
-            $node_id_map->put($state->getName(), sprintf('node%d', ++$node_id));
+        $nodeId = 0;
+        $nodeIdMap = new Map;
+        foreach ($stateMachine->getStates() as $state) {
+            $nodeIdMap->put($state->getName(), sprintf('node%d', ++$nodeId));
         }
         return sprintf(
             "digraph \"%s\" {\n    %s\n\n    %s\n}",
-            $state_machine->getName(),
-            implode("\n    ", $this->renderStateNodes($state_machine, $node_id_map)),
-            implode("\n    ", $this->renderTransitionEdges($state_machine, $node_id_map))
+            $stateMachine->getName(),
+            implode("\n    ", $this->renderStateNodes($stateMachine, $nodeIdMap)),
+            implode("\n    ", $this->renderTransitionEdges($stateMachine, $nodeIdMap))
         );
     }
 
-    private function renderStateNodes(StateMachineInterface $state_machine, Map $node_id_map): array
+    private function renderStateNodes(StateMachineInterface $stateMachine, Map $nodeIdMap): array
     {
-        $state_nodes = [];
-        foreach ($state_machine->getStates() as $state_name => $state) {
-            $attributes = sprintf('label="%s"', $state_name);
+        $stateNodes = [];
+        foreach ($stateMachine->getStates() as $stateName => $state) {
+            $attributes = sprintf('label="%s"', $stateName);
             $attributes .= ' fontname="Arial" fontsize="13" fontcolor="#000000" color="#607d8b"';
             if ($state->isFinal() || $state->isInitial()) {
                 $attributes .= ' style="bold"';
             }
-            $state_nodes[] = sprintf('%s [%s];', $node_id_map->get($state_name), $attributes);
+            $stateNodes[] = sprintf('%s [%s];', $nodeIdMap->get($stateName), $attributes);
         }
-        return $state_nodes;
+        return $stateNodes;
     }
 
-    private function renderTransitionEdges(StateMachineInterface $state_machine, Map $node_id_map): array
+    private function renderTransitionEdges(StateMachineInterface $stateMachine, Map $nodeIdMap): array
     {
         $edges = [];
-        foreach ($state_machine->getStateTransitions() as $state_name => $state_transitions) {
-            foreach ($state_transitions as $transition) {
-                $from_node = $node_id_map->get($transition->getFrom());
-                $to_node = $node_id_map->get($transition->getTo());
-                $transition_label = (string)$transition;
-                $attributes = sprintf('label="%s" ', trim(addslashes($transition_label)));
+        foreach ($stateMachine->getStateTransitions() as $stateName => $stateTransitions) {
+            foreach ($stateTransitions as $transition) {
+                $fromNode = $nodeIdMap->get($transition->getFrom());
+                $toNode = $nodeIdMap->get($transition->getTo());
+                $transitionLabel = (string)$transition;
+                $attributes = sprintf('label="%s" ', trim(addslashes($transitionLabel)));
                 $attributes .= 'fontname="Arial" fontsize="12" fontcolor="#7f8c8d" color="#2ecc71"';
-                $edges[] = sprintf('%s -> %s [%s];', $from_node, $to_node, $attributes);
+                $edges[] = sprintf('%s -> %s [%s];', $fromNode, $toNode, $attributes);
             }
         }
         return $edges;

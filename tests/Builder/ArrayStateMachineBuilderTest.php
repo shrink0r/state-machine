@@ -10,24 +10,24 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Tests\Builder;
 
-use Symfony\Component\Yaml\Parser;
 use Daikon\StateMachine\Builder\ArrayStateMachineBuilder;
 use Daikon\StateMachine\Param\Input;
 use Daikon\StateMachine\Tests\TestCase;
+use Symfony\Component\Yaml\Parser;
 
 final class ArrayStateMachineBuilderTest extends TestCase
 {
     public function testBuild()
     {
-        $state_machine = (new ArrayStateMachineBuilder($this->fixture('statemachine')))->build();
+        $state_machine = (new ArrayStateMachineBuilder($this->fixture('state_machine')))->build();
 
-        $initial_input = new Input([ 'transcoding_required' => true ]);
-        $initial_output = $state_machine->execute($initial_input);
-        $current_state = $initial_output->getCurrentState();
-        $this->assertEquals('transcoding', $current_state);
-        $input = Input::fromOutput($initial_output)->withEvent('video_transcoded');
-        $final_output = $state_machine->execute($input, $current_state);
-        $this->assertEquals('ready', $final_output->getCurrentState());
+        $initialInput = new Input([ 'transcoding_required' => true ]);
+        $initialOutput = $state_machine->execute($initialInput);
+        $currentState = $initialOutput->getCurrentState();
+        $this->assertEquals('transcoding', $currentState);
+        $input = Input::fromOutput($initialOutput)->withEvent('video_transcoded');
+        $finalOutput = $state_machine->execute($input, $currentState);
+        $this->assertEquals('ready', $finalOutput->getCurrentState());
     }
 
     public function testNonStringConstraint()

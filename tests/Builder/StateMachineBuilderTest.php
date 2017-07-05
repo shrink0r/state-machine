@@ -11,13 +11,11 @@ declare(strict_types=1);
 namespace Daikon\StateMachine\Tests\Builder;
 
 use Daikon\StateMachine\Builder\StateMachineBuilder;
-use Daikon\StateMachine\Param\Settings;
-use Daikon\StateMachine\StateMachine;
-use Daikon\StateMachine\StateMachineInterface;
 use Daikon\StateMachine\State\FinalState;
 use Daikon\StateMachine\State\InitialState;
 use Daikon\StateMachine\State\InteractiveState;
-use Daikon\StateMachine\State\State;
+use Daikon\StateMachine\StateMachine;
+use Daikon\StateMachine\StateMachineInterface;
 use Daikon\StateMachine\Tests\Builder\Fixture\EmptyClass;
 use Daikon\StateMachine\Tests\TestCase;
 use Daikon\StateMachine\Transition\Transition;
@@ -26,7 +24,7 @@ final class StateMachineBuilderTest extends TestCase
 {
     public function testBuild()
     {
-        $state_machine = (new StateMachineBuilder(StateMachine::CLASS))
+        $stateMachine = (new StateMachineBuilder(StateMachine::CLASS))
             ->addStateMachineName('video-transcoding')
             ->addState($this->createState('initial', InitialState::CLASS))
             ->addStates([
@@ -40,8 +38,8 @@ final class StateMachineBuilderTest extends TestCase
                 new Transition('state2', 'final')
             ])
             ->build();
-        $this->assertInstanceOf(StateMachineInterface::CLASS, $state_machine);
-        $this->assertEquals('video-transcoding', $state_machine->getName());
+        $this->assertInstanceOf(StateMachineInterface::CLASS, $stateMachine);
+        $this->assertEquals('video-transcoding', $stateMachine->getName());
     }
 
     /**

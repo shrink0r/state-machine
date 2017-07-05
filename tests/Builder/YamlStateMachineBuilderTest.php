@@ -18,15 +18,15 @@ final class YamlStateMachineBuilderTest extends TestCase
 {
     public function testBuild()
     {
-        $state_machine = (new YamlStateMachineBuilder($this->fixture('statemachine')))->build();
+        $stateMachine = (new YamlStateMachineBuilder($this->fixture('state_machine')))->build();
 
-        $initial_input = new Input([ 'transcoding_required' => true ]);
-        $initial_output = $state_machine->execute($initial_input);
-        $current_state = $initial_output->getCurrentState();
-        $this->assertEquals('transcoding', $current_state);
-        $input = Input::fromOutput($initial_output)->withEvent('video_transcoded');
-        $final_output = $state_machine->execute($input, $current_state);
-        $this->assertEquals('ready', $final_output->getCurrentState());
+        $initialInput = new Input([ 'transcoding_required' => true ]);
+        $initialOutput = $stateMachine->execute($initialInput);
+        $currentState = $initialOutput->getCurrentState();
+        $this->assertEquals('transcoding', $currentState);
+        $input = Input::fromOutput($initialOutput)->withEvent('video_transcoded');
+        $finalOutput = $stateMachine->execute($input, $currentState);
+        $this->assertEquals('ready', $finalOutput->getCurrentState());
     }
 
     public function testNonStringConstraint()

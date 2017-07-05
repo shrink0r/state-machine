@@ -10,22 +10,20 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Tests;
 
-use Shrink0r\PhpSchema\Factory;
-use Shrink0r\PhpSchema\Schema;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Daikon\StateMachine\Param\Input;
 use Daikon\StateMachine\Param\Settings;
-use Daikon\StateMachine\StateMachine;
 use Daikon\StateMachine\State\FinalState;
 use Daikon\StateMachine\State\InitialState;
 use Daikon\StateMachine\State\InteractiveState;
-use Daikon\StateMachine\State\State;
 use Daikon\StateMachine\State\StateSet;
+use Daikon\StateMachine\stateMachine;
 use Daikon\StateMachine\Tests\Fixture\InactiveTransition;
-use Daikon\StateMachine\Tests\TestCase;
 use Daikon\StateMachine\Transition\ExpressionConstraint;
 use Daikon\StateMachine\Transition\Transition;
 use Daikon\StateMachine\Transition\TransitionSet;
+use Shrink0r\PhpSchema\Factory;
+use Shrink0r\PhpSchema\Schema;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class StateMachineTest extends TestCase
 {
@@ -51,41 +49,41 @@ final class StateMachineTest extends TestCase
             ))
             ->add(new Transition('foobar', 'bar'))
             ->add(new Transition('bar', 'final'));
-        $statemachine = new StateMachine('test-machine', $states, $transitions);
-        $intial_output = $statemachine->execute(new Input([ 'is_ready' => true ]), 'initial');
-        $input = Input::fromOutput($intial_output)->withEvent('on_signal');
-        $output = $statemachine->execute($input, $intial_output->getCurrentState());
+        $stateMachine = new stateMachine('test-machine', $states, $transitions);
+        $intialOutput = $stateMachine->execute(new Input([ 'is_ready' => true ]), 'initial');
+        $input = Input::fromOutput($intialOutput)->withEvent('on_signal');
+        $output = $stateMachine->execute($input, $intialOutput->getCurrentState());
         $this->assertEquals('final', $output->getCurrentState());
     }
 
     public function testGetName()
     {
-        $statemachine = $this->buildStateMachine();
-        $this->assertEquals('test-machine', $statemachine->getName());
+        $stateMachine = $this->buildstateMachine();
+        $this->assertEquals('test-machine', $stateMachine->getName());
     }
 
     public function testGetInitialState()
     {
-        $statemachine = $this->buildStateMachine();
-        $this->assertEquals('initial', $statemachine->getInitialState()->getName());
+        $stateMachine = $this->buildstateMachine();
+        $this->assertEquals('initial', $stateMachine->getInitialState()->getName());
     }
 
     public function testGetStates()
     {
-        $statemachine = $this->buildStateMachine();
-        $this->assertCount(6, $statemachine->getStates());
+        $stateMachine = $this->buildstateMachine();
+        $this->assertCount(6, $stateMachine->getStates());
     }
 
     public function testFinalStates()
     {
-        $statemachine = $this->buildStateMachine();
-        $this->assertCount(1, $statemachine->getFinalStates());
+        $stateMachine = $this->buildstateMachine();
+        $this->assertCount(1, $stateMachine->getFinalStates());
     }
 
     public function testGetStateTransitions()
     {
-        $statemachine = $this->buildStateMachine();
-        $this->assertCount(5, $statemachine->getStateTransitions());
+        $stateMachine = $this->buildstateMachine();
+        $this->assertCount(5, $stateMachine->getStateTransitions());
     }
 
     /**
@@ -111,8 +109,8 @@ final class StateMachineTest extends TestCase
             ->add(new Transition('approval', 'archive'))
             ->add(new Transition('published', 'archive'))
             ->add(new Transition('archive', 'final'));
-        $statemachine = new StateMachine('test-machine', $states, $transitions);
-        $statemachine->execute(new Input);
+        $stateMachine = new stateMachine('test-machine', $states, $transitions);
+        $stateMachine->execute(new Input);
     } // @codeCoverageIgnore
 
     /**
@@ -138,42 +136,42 @@ Looks like there is a loop between: approval -> published -> archive');
             ->add(new Transition('published', 'archive'))
             ->add(new Transition('archive', 'approval'))
             ->add(new InactiveTransition('archive', 'final'));
-        $statemachine = new StateMachine('test-machine', $states, $transitions);
-        $statemachine->execute(new Input);
+        $stateMachine = new stateMachine('test-machine', $states, $transitions);
+        $stateMachine->execute(new Input);
     } // @codeCoverageIgnore
 
     /**
      * @expectedException Daikon\StateMachine\Error\ExecutionError
-     * @expectedExceptionMessage Trying to (re)execute statemachine at final state: final
+     * @expectedExceptionMessage Trying to (re)execute state-machine at final state: final
      */
     public function testResumeOnFinalState()
     {
-        $statemachine = $this->buildStateMachine();
-        $statemachine->execute(new Input, 'final');
+        $stateMachine = $this->buildstateMachine();
+        $stateMachine->execute(new Input, 'final');
     } // @codeCoverageIgnore
 
     /**
      * @expectedException Daikon\StateMachine\Error\ExecutionError
-     * @expectedExceptionMessage Trying to start statemachine execution at unknown state: baz
+     * @expectedExceptionMessage Trying to start state-machine execution at unknown state: baz
      */
     public function testResumeOnUnknownState()
     {
-        $statemachine = $this->buildStateMachine();
-        $statemachine->execute(new Input, 'baz');
+        $stateMachine = $this->buildstateMachine();
+        $stateMachine->execute(new Input, 'baz');
     } // @codeCoverageIgnore
 
     /**
      * @expectedException Daikon\StateMachine\Error\ExecutionError
-     * @expectedExceptionMessage Trying to resume statemachine executing without providing an event/signal.
+     * @expectedExceptionMessage Trying to resume state-machine executing without providing an event/signal.
      */
     public function testResumeWithoutEvent()
     {
-        $statemachine = $this->buildStateMachine();
-        $output = $statemachine->execute(new Input);
-        $statemachine->execute(Input::fromOutput($output), $output->getCurrentState());
+        $stateMachine = $this->buildstateMachine();
+        $output = $stateMachine->execute(new Input);
+        $stateMachine->execute(Input::fromOutput($output), $output->getCurrentState());
     } // @codeCoverageIgnore
 
-    private function buildStateMachine()
+    private function buildstateMachine()
     {
         $states = new StateSet([
             $this->createState('initial', InitialState::CLASS),
@@ -189,6 +187,6 @@ Looks like there is a loop between: approval -> published -> archive');
             ->add(new Transition('approval', 'published'))
             ->add(new Transition('published', 'archive'))
             ->add(new Transition('archive', 'final'));
-        return new StateMachine('test-machine', $states, $transitions);
+        return new stateMachine('test-machine', $states, $transitions);
     }
 }

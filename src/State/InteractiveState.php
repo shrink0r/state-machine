@@ -10,9 +10,6 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\State;
 
-use Daikon\StateMachine\State\StateInterface;
-use Daikon\StateMachine\State\StateTrait;
-
 final class InteractiveState implements StateInterface
 {
     use StateTrait;

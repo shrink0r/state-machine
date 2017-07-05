@@ -10,12 +10,6 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Builder;
 
-use Ds\Map;
-use Shrink0r\Monatic\Maybe;
-use Shrink0r\PhpSchema\Factory as PhpSchemaFactory;
-use Shrink0r\PhpSchema\Schema;
-use Shrink0r\PhpSchema\SchemaInterface;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Daikon\StateMachine\Error\ConfigError;
 use Daikon\StateMachine\Error\MissingImplementation;
 use Daikon\StateMachine\Param\Settings;
@@ -29,6 +23,12 @@ use Daikon\StateMachine\State\ValidatorInterface;
 use Daikon\StateMachine\Transition\ExpressionConstraint;
 use Daikon\StateMachine\Transition\Transition;
 use Daikon\StateMachine\Transition\TransitionInterface;
+use Ds\Map;
+use Shrink0r\Monatic\Maybe;
+use Shrink0r\PhpSchema\Factory as PhpSchemaFactory;
+use Shrink0r\PhpSchema\Schema;
+use Shrink0r\PhpSchema\SchemaInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class Factory implements FactoryInterface
 {
@@ -36,7 +36,9 @@ final class Factory implements FactoryInterface
 
     const SUFFIX_OUT = '-output_schema';
 
-    private static $default_classes = [
+    private $classMap;
+
+    private static $defaultClasses = [
         'initial' => InitialState::CLASS,
         'interactive' => InteractiveState::CLASS,
         'state' => State::CLASS,
@@ -44,40 +46,40 @@ final class Factory implements FactoryInterface
         'transition' => Transition::CLASS
     ];
 
-    private static $default_validation_schema = [ ':any_name:' => [ 'type' => 'any' ] ];
+    private static $defaultValidationSchema = [ ':any_name:' => [ 'type' => 'any' ] ];
 
-    private $expression_engine;
+    private $expressionEngine;
 
-    public function __construct(array $class_map = [], ExpressionLanguage $expression_engine = null)
+    public function __construct(array $classMap = [], ExpressionLanguage $expressionEngine = null)
     {
-        $this->expression_engine = $expression_engine ?? new ExpressionLanguage;
-        $this->class_map = new Map(array_merge(self::$default_classes, $class_map));
+        $this->expressionEngine = $expressionEngine ?? new ExpressionLanguage;
+        $this->classMap = new Map(array_merge(self::$defaultClasses, $classMap));
     }
 
     public function createState(string $name, array $state = null): StateInterface
     {
         $state = Maybe::unit($state);
-        $state_implementor = $this->resolveStateImplementor($state);
+        $stateImplementor = $this->resolveStateImplementor($state);
         $settings = $state->settings->get() ?? [];
         $settings['_output'] = $state->output->get() ?? [];
-        $state_instance = new $state_implementor(
+        $stateInstance = new $stateImplementor(
             $name,
             new Settings($settings),
             $this->createValidator($name, $state),
-            $this->expression_engine
+            $this->expressionEngine
         );
-        if ($state->final->get() && !$state_instance->isFinal()) {
+        if ($state->final->get() && !$stateInstance->isFinal()) {
             throw new ConfigError("Trying to provide custom state that isn't final but marked as final in config.");
         }
-        if ($state->initial->get() && !$state_instance->isInitial()) {
+        if ($state->initial->get() && !$stateInstance->isInitial()) {
             throw new ConfigError("Trying to provide custom state that isn't initial but marked as initial in config.");
         }
-        if ($state->interactive->get() && !$state_instance->isInteractive()) {
+        if ($state->interactive->get() && !$stateInstance->isInteractive()) {
             throw new ConfigError(
                 "Trying to provide custom state that isn't interactive but marked as interactive in config."
             );
         }
-        return $state_instance;
+        return $stateInstance;
     }
 
     public function createTransition(string $from, string $to, array $config = null): TransitionInterface
@@ -86,7 +88,7 @@ final class Factory implements FactoryInterface
         if (is_string($transition->when->get())) {
             $config['when'] = [ $transition->when->get() ];
         }
-        $implementor = $transition->class->get() ?? $this->class_map->get('transition');
+        $implementor = $transition->class->get() ?? $this->classMap->get('transition');
         if (!in_array(TransitionInterface::CLASS, class_implements($implementor))) {
             throw new MissingImplementation(
                 'Trying to create transition without implementing required '.TransitionInterface::CLASS
@@ -97,7 +99,7 @@ final class Factory implements FactoryInterface
             if (!is_string($expression)) {
                 continue;
             }
-            $constraints[] = new ExpressionConstraint($expression, $this->expression_engine);
+            $constraints[] = new ExpressionConstraint($expression, $this->expressionEngine);
         }
         $settings = new Settings(Maybe::unit($config)->settings->get() ?? []);
         return new $implementor($from, $to, $settings, $constraints);
@@ -107,24 +109,24 @@ final class Factory implements FactoryInterface
     {
         switch (true) {
             case $state->initial->get():
-                $state_implementor = $this->class_map->get('initial');
+                $stateImplementor = $this->classMap->get('initial');
                 break;
             case $state->final->get() === true || $state->get() === null: // cast null to final-state by convention
-                $state_implementor = $this->class_map->get('final');
+                $stateImplementor = $this->classMap->get('final');
                 break;
             case $state->interactive->get():
-                $state_implementor = $this->class_map->get('interactive');
+                $stateImplementor = $this->classMap->get('interactive');
                 break;
             default:
-                $state_implementor = $this->class_map->get('state');
+                $stateImplementor = $this->classMap->get('state');
         }
-        $state_implementor = $state->class->get() ?? $state_implementor;
-        if (!in_array(StateInterface::CLASS, class_implements($state_implementor))) {
+        $stateImplementor = $state->class->get() ?? $stateImplementor;
+        if (!in_array(StateInterface::CLASS, class_implements($stateImplementor))) {
             throw new MissingImplementation(
                 'Trying to use a custom-state that does not implement required '.StateInterface::CLASS
             );
         }
-        return $state_implementor;
+        return $stateImplementor;
     }
 
     private function createValidator(string $name, Maybe $state): ValidatorInterface
@@ -132,17 +134,17 @@ final class Factory implements FactoryInterface
         return new Validator(
             $this->createValidationSchema(
                 $name.self::SUFFIX_IN,
-                $state->input_schema->get() ?? self::$default_validation_schema
+                $state->input_schema->get() ?? self::$defaultValidationSchema
             ),
             $this->createValidationSchema(
                 $name.self::SUFFIX_OUT,
-                $state->output_schema->get() ?? self::$default_validation_schema
+                $state->output_schema->get() ?? self::$defaultValidationSchema
             )
         );
     }
 
-    private function createValidationSchema(string $name, array $schema_definition): SchemaInterface
+    private function createValidationSchema(string $name, array $schemaDefinition): SchemaInterface
     {
-        return new Schema($name, [ 'type' => 'assoc', 'properties' => $schema_definition ], new PhpSchemaFactory);
+        return new Schema($name, [ 'type' => 'assoc', 'properties' => $schemaDefinition ], new PhpSchemaFactory);
     }
 }

@@ -10,18 +10,15 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Param;
 
-use Daikon\StateMachine\Param\InputInterface;
-use Daikon\StateMachine\Param\ParamHolderInterface;
-
 interface OutputInterface extends ParamHolderInterface
 {
     /**
-     * @param string $current_state
+     * @param string $currentState
      * @param InputInterface $input
      *
      * @return self
      */
-    public static function fromInput(string $current_state, InputInterface $input): self;
+    public static function fromInput(string $currentState, InputInterface $input): self;
 
     /**
      * @return string

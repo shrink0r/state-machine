@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Daikon\StateMachine\Error;
 
 use RuntimeException;
-use Daikon\StateMachine\Error\ErrorInterface;
 
 class MissingImplementation extends RuntimeException implements ErrorInterface
 {

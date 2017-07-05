@@ -10,10 +10,6 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Param;
 
-use Daikon\StateMachine\Param\InputInterface;
-use Daikon\StateMachine\Param\OutputInterface;
-use Daikon\StateMachine\Param\ParamHolderTrait;
-
 final class Input implements InputInterface
 {
     use ParamHolderTrait;

@@ -16,7 +16,6 @@ use Daikon\StateMachine\Param\Input;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\Output;
 use Daikon\StateMachine\Param\OutputInterface;
-use Daikon\StateMachine\StateMachineInterface;
 use Daikon\StateMachine\State\ExecutionTracker;
 use Daikon\StateMachine\State\StateInterface;
 use Daikon\StateMachine\State\StateMap;
@@ -32,38 +31,38 @@ final class StateMachine implements StateMachineInterface
 
     private $states;
 
-    private $state_transitions;
+    private $stateTransitions;
 
-    private $initial_state;
+    private $initialState;
 
-    private $final_states;
+    private $finalStates;
 
-    public function __construct(string $name, StateSet $state_set, TransitionSet $transition_set)
+    public function __construct(string $name, StateSet $stateSet, TransitionSet $transitionSet)
     {
-        list($initial_state, $states, $final_states) = $state_set->splat();
+        list($initial_state, $states, $final_states) = $stateSet->splat();
         $this->name = $name;
         $this->states = $states;
-        $this->final_states = $final_states;
-        $this->initial_state = $initial_state;
-        $this->state_transitions = new StateTransitions($states, $transition_set);
+        $this->finalStates = $final_states;
+        $this->initialState = $initial_state;
+        $this->stateTransitions = new StateTransitions($states, $transitionSet);
     }
 
-    public function execute(InputInterface $input, string $start_state = null): OutputInterface
+    public function execute(InputInterface $input, string $startState = null): OutputInterface
     {
-        $execution_tracker = new ExecutionTracker($this);
-        $next_state = $this->determineStartState($input, $start_state);
+        $executionTracker = new ExecutionTracker($this);
+        $nextState = $this->determineStartState($input, $startState);
         do {
-            $cur_cycle = $execution_tracker->track($next_state);
-            $output = $next_state->execute($input);
-            if ($next_state->isInteractive()) {
+            $curCycle = $executionTracker->track($nextState);
+            $output = $nextState->execute($input);
+            if ($nextState->isInteractive()) {
                 break;
             }
-            $next_state = $this->activateTransition($input, $output);
+            $nextState = $this->activateTransition($input, $output);
             $input = Input::fromOutput($output);
-        } while ($next_state && $cur_cycle < self::MAX_CYCLES);
+        } while ($nextState && $curCycle < self::MAX_CYCLES);
 
-        if ($next_state && $cur_cycle === self::MAX_CYCLES) {
-            throw CorruptExecutionFlow::fromExecutionTracker($execution_tracker, self::MAX_CYCLES);
+        if ($nextState && $curCycle === self::MAX_CYCLES) {
+            throw CorruptExecutionFlow::fromExecutionTracker($executionTracker, self::MAX_CYCLES);
         }
         return $output;
     }
@@ -80,55 +79,55 @@ final class StateMachine implements StateMachineInterface
 
     public function getInitialState(): StateInterface
     {
-        return $this->initial_state;
+        return $this->initialState;
     }
 
     public function getFinalStates(): StateMap
     {
-        return $this->final_states;
+        return $this->finalStates;
     }
 
     public function getStateTransitions(): StateTransitions
     {
-        return $this->state_transitions;
+        return $this->stateTransitions;
     }
 
-    private function determineStartState(InputInterface $input, string $state_name = null): StateInterface
+    private function determineStartState(InputInterface $input, string $stateName = null): StateInterface
     {
-        if (!$state_name) {
+        if (!$stateName) {
             return $this->getInitialState();
         }
-        if (!$this->states->has($state_name)) {
-            throw new ExecutionError("Trying to start statemachine execution at unknown state: ".$state_name);
+        if (!$this->states->has($stateName)) {
+            throw new ExecutionError("Trying to start state-machine execution at unknown state: ".$stateName);
         }
-        $start_state = $this->states->get($state_name);
-        if ($start_state->isFinal()) {
-            throw new ExecutionError("Trying to (re)execute statemachine at final state: ".$state_name);
+        $startState = $this->states->get($stateName);
+        if ($startState->isFinal()) {
+            throw new ExecutionError("Trying to (re)execute state-machine at final state: ".$stateName);
         }
-        if ($start_state->isInteractive() && !$input->hasEvent()) {
-            throw new ExecutionError("Trying to resume statemachine executing without providing an event/signal.");
+        if ($startState->isInteractive() && !$input->hasEvent()) {
+            throw new ExecutionError("Trying to resume state-machine executing without providing an event/signal.");
         }
-        return $start_state->isInteractive()
-            ? $this->activateTransition($input, Output::fromInput($start_state->getName(), $input))
-            : $start_state;
+        return $startState->isInteractive()
+            ? $this->activateTransition($input, Output::fromInput($startState->getName(), $input))
+            : $startState;
     }
 
     private function activateTransition(InputInterface $input, OutputInterface $output)
     {
-        $next_state = null;
-        foreach ($this->state_transitions->get($output->getCurrentState()) as $transition) {
+        $nextState = null;
+        foreach ($this->stateTransitions->get($output->getCurrentState()) as $transition) {
             if ($transition->isActivatedBy($input, $output)) {
-                if (is_null($next_state)) {
-                    $next_state = $this->states->get($transition->getTo());
+                if (is_null($nextState)) {
+                    $nextState = $this->states->get($transition->getTo());
                     continue;
                 }
                 throw new ExecutionError(
                     'Trying to activate more than one transition at a time. Transition: '.
-                    $output->getCurrentState().' -> '.$next_state->getName().' was activated first. '.
+                    $output->getCurrentState().' -> '.$nextState->getName().' was activated first. '.
                     'Now '.$transition->getFrom().' -> '.$transition->getTo().' is being activated too.'
                 );
             }
         }
-        return $next_state;
+        return $nextState;
     }
 }

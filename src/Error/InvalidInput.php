@@ -11,28 +11,27 @@ declare(strict_types=1);
 namespace Daikon\StateMachine\Error;
 
 use DomainException;
-use Daikon\StateMachine\Error\ErrorInterface;
 
 class InvalidInput extends DomainException implements ErrorInterface
 {
-    private $validation_errors;
+    private $validationErrors;
 
-    public function __construct(array $validation_errors, string $msg = '')
+    public function __construct(array $validationErrors, string $msg = '')
     {
-        $this->validation_errors = $validation_errors;
+        $this->validationErrors = $validationErrors;
         parent::__construct($msg.PHP_EOL.$this);
     }
 
     public function getValidationErrors(): array
     {
-        return $this->validation_errors;
+        return $this->validationErrors;
     }
 
     public function __toString(): string
     {
         $errors = [];
-        foreach ($this->getValidationErrors() as $prop_name => $errors) {
-            $errors[] = $prop_name.": ".implode(', ', $errors);
+        foreach ($this->getValidationErrors() as $propName => $errors) {
+            $errors[] = $propName.": ".implode(', ', $errors);
         }
         return implode("\n", $errors);
     }

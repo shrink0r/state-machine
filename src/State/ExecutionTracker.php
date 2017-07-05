@@ -10,40 +10,39 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\State;
 
+use Daikon\StateMachine\StateMachineInterface;
 use Ds\Map;
 use Ds\Vector;
 use Shrink0r\SuffixTree\Builder\SuffixTreeBuilder;
-use Daikon\StateMachine\StateMachineInterface;
-use Daikon\StateMachine\State\StateInterface;
 
 final class ExecutionTracker
 {
     private $breadcrumbs;
 
-    private $execution_counts;
+    private $executionCounts;
 
-    private $state_machine;
+    private $stateMachine;
 
-    public function __construct(StateMachineInterface $state_machine)
+    public function __construct(StateMachineInterface $stateMachine)
     {
-        $this->state_machine = $state_machine;
+        $this->stateMachine = $stateMachine;
         $this->breadcrumbs = new Vector;
-        $this->execution_counts = new Map;
-        foreach ($state_machine->getStates() as $state) {
-            $this->execution_counts[$state->getName()] = 0;
+        $this->executionCounts = new Map;
+        foreach ($stateMachine->getStates() as $state) {
+            $this->executionCounts[$state->getName()] = 0;
         }
     }
 
     public function track(StateInterface $state): int
     {
         $this->breadcrumbs->push($state->getName());
-        $this->execution_counts[$state->getName()]++;
-        return $this->execution_counts[$state->getName()];
+        $this->executionCounts[$state->getName()]++;
+        return $this->executionCounts[$state->getName()];
     }
 
     public function getExecutionCount(StateInterface $state): int
     {
-        return $this->execution_counts[$state->getName()];
+        return $this->executionCounts[$state->getName()];
     }
 
     public function getBreadcrumbs(): Vector
@@ -53,13 +52,13 @@ final class ExecutionTracker
 
     public function detectExecutionLoop(): Vector
     {
-        $execution_path = implode(' ', $this->breadcrumbs->toArray());
-        $loop_path = $execution_path;
-        $tree_builder = new SuffixTreeBuilder;
-        while (str_word_count($loop_path) > count($this->state_machine->getStates())) {
-            $suffix_tree = $tree_builder->build($loop_path.'$');
-            $loop_path = trim($suffix_tree->findLongestRepetition());
+        $executionPath = implode(' ', $this->breadcrumbs->toArray());
+        $loopPath = $executionPath;
+        $treeBuilder = new SuffixTreeBuilder;
+        while (str_word_count($loopPath) > count($this->stateMachine->getStates())) {
+            $suffixTree = $treeBuilder->build($loopPath.'$');
+            $loopPath = trim($suffixTree->findLongestRepetition());
         }
-        return new Vector(explode(' ', $loop_path));
+        return new Vector(explode(' ', $loopPath));
     }
 }

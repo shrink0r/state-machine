@@ -11,15 +11,14 @@ declare(strict_types=1);
 namespace Daikon\StateMachine\Error;
 
 use DomainException;
-use Daikon\StateMachine\Error\ErrorInterface;
 
 class InvalidOutput extends DomainException implements ErrorInterface
 {
     private $validation_errors;
 
-    public function __construct(array $validation_errors, $msg = '')
+    public function __construct(array $validationErrors, $msg = '')
     {
-        $this->validation_errors = $validation_errors;
+        $this->validation_errors = $validationErrors;
         parent::__construct($msg.PHP_EOL.$this);
     }
 

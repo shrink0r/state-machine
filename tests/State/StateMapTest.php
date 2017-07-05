@@ -20,62 +20,62 @@ final class StateMapTest extends TestCase
 {
     public function testCount()
     {
-        $state_map = new StateMap($this->buildStateArray());
-        $this->assertCount(5, $state_map);
+        $stateMap = new StateMap($this->buildStateArray());
+        $this->assertCount(5, $stateMap);
     }
 
     public function testPut()
     {
-        $state_map = (new StateMap)->put($this->createState('initial', InitialState::CLASS));
-        $this->assertCount(1, $state_map);
+        $stateMap = (new StateMap)->put($this->createState('initial', InitialState::CLASS));
+        $this->assertCount(1, $stateMap);
     }
 
     public function testGet()
     {
-        $state_map = new StateMap([
+        $stateMap = new StateMap([
             $this->createState('initial', InitialState::CLASS),
             $foo_state = $this->createState('foo')
         ]);
-        $this->assertEquals($foo_state, $state_map->get('foo'));
+        $this->assertEquals($foo_state, $stateMap->get('foo'));
     }
 
     public function testHas()
     {
-        $state_map = new StateMap([
+        $stateMap = new StateMap([
             $this->createState('state1'),
             $this->createState('state2')
         ]);
-        $this->assertTrue($state_map->has('state1'));
-        $this->assertFalse($state_map->has('state3'));
+        $this->assertTrue($stateMap->has('state1'));
+        $this->assertFalse($stateMap->has('state3'));
     }
 
     public function testFind()
     {
-        $state_map = (new StateMap($this->buildStateArray()))->find(function (StateInterface $state) {
+        $stateMap = (new StateMap($this->buildStateArray()))->find(function (StateInterface $state) {
             return !$state->isFinal() && !$state->isInitial();
         });
-        $this->assertCount(3, $state_map);
+        $this->assertCount(3, $stateMap);
     }
 
     public function testFindOne()
     {
-        $state_map = new StateMap($this->buildStateArray());
-        $bar_state = $state_map->findOne(function (StateInterface $state) {
+        $stateMap = new StateMap($this->buildStateArray());
+        $barState = $stateMap->findOne(function (StateInterface $state) {
             return $state->getName() === 'bar';
         });
-        $this->assertEquals($state_map->get('bar'), $bar_state);
-        $unknown_state = $state_map->findOne(function (StateInterface $state) {
+        $this->assertEquals($stateMap->get('bar'), $barState);
+        $unknownState = $stateMap->findOne(function (StateInterface $state) {
             return $state->getName() === 'snafu';
         });
-        $this->assertNull($unknown_state);
+        $this->assertNull($unknownState);
     }
 
     public function testGetIterator()
     {
-        $state_map = new StateMap($this->buildStateArray());
+        $stateMap = new StateMap($this->buildStateArray());
         $i = 0;
-        foreach ($state_map as $state_name => $state) {
-            $this->assertEquals($state_name, $state->getName());
+        foreach ($stateMap as $stateName => $state) {
+            $this->assertEquals($stateName, $state->getName());
             $i++;
         }
         $this->assertEquals(5, $i);
@@ -84,14 +84,14 @@ final class StateMapTest extends TestCase
     public function testToArray()
     {
         $states = $this->buildStateArray();
-        $state_map = new StateMap($states);
-        $expected_array = array_combine(
+        $stateMap = new StateMap($states);
+        $expectedArray = array_combine(
             array_map(function (StateInterface $state) {
                 return $state->getName();
             }, $states),
             $states
         );
-        $this->assertEquals($expected_array, $state_map->toArray());
+        $this->assertEquals($expectedArray, $stateMap->toArray());
     }
 
     private function buildStateArray()

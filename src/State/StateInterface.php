@@ -13,7 +13,6 @@ namespace Daikon\StateMachine\State;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\OutputInterface;
 use Daikon\StateMachine\Param\ParamHolderInterface;
-use Daikon\StateMachine\State\ValidatorInterface;
 
 interface StateInterface
 {

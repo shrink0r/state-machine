@@ -10,29 +10,28 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\State;
 
-use Shrink0r\PhpSchema\Error;
-use Shrink0r\PhpSchema\SchemaInterface;
 use Daikon\StateMachine\Error\InvalidInput;
 use Daikon\StateMachine\Error\InvalidOutput;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\OutputInterface;
-use Daikon\StateMachine\State\StateInterface;
+use Shrink0r\PhpSchema\Error;
+use Shrink0r\PhpSchema\SchemaInterface;
 
 final class Validator implements ValidatorInterface
 {
-    private $input_schema;
+    private $inputSchema;
 
-    private $output_schema;
+    private $outputSchema;
 
-    public function __construct(SchemaInterface $input_schema, SchemaInterface $output_schema)
+    public function __construct(SchemaInterface $inputSchema, SchemaInterface $outputSchema)
     {
-        $this->input_schema = $input_schema;
-        $this->output_schema = $output_schema;
+        $this->inputSchema = $inputSchema;
+        $this->outputSchema = $outputSchema;
     }
 
     public function validateInput(StateInterface $state, InputInterface $input)
     {
-        $result = $this->input_schema->validate($input->toArray());
+        $result = $this->inputSchema->validate($input->toArray());
         if ($result instanceof Error) {
             throw new InvalidInput(
                 $result->unwrap(),
@@ -43,7 +42,7 @@ final class Validator implements ValidatorInterface
 
     public function validateOutput(StateInterface $state, OutputInterface $output)
     {
-        $result = $this->output_schema->validate($output->toArray()['params']);
+        $result = $this->outputSchema->validate($output->toArray()['params']);
         if ($result instanceof Error) {
             throw new InvalidOutput(
                 $result->unwrap(),
@@ -54,11 +53,11 @@ final class Validator implements ValidatorInterface
 
     public function getInputSchema(): SchemaInterface
     {
-        return $this->input_schema;
+        return $this->inputSchema;
     }
 
     public function getOutputSchema(): SchemaInterface
     {
-        return $this->output_schema;
+        return $this->outputSchema;
     }
 }

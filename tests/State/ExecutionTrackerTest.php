@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Tests\State;
 
-use Daikon\StateMachine\StateMachine;
 use Daikon\StateMachine\State\ExecutionTracker;
 use Daikon\StateMachine\State\FinalState;
 use Daikon\StateMachine\State\InitialState;
 use Daikon\StateMachine\State\StateSet;
+use Daikon\StateMachine\StateMachine;
 use Daikon\StateMachine\Tests\TestCase;
 use Daikon\StateMachine\Transition\Transition;
 use Daikon\StateMachine\Transition\TransitionSet;
@@ -23,9 +23,9 @@ final class ExecutionTrackerTest extends TestCase
 {
     public function testTrack()
     {
-        $state_machine = $this->createStateMachine();
-        $states = $state_machine->getStates();
-        $tracker = new ExecutionTracker($state_machine);
+        $stateMachine = $this->createStateMachine();
+        $states = $stateMachine->getStates();
+        $tracker = new ExecutionTracker($stateMachine);
         $this->assertEquals(1, $tracker->track($states->get('initial')));
         $this->assertEquals(1, $tracker->track($states->get('foo')));
         $this->assertEquals(1, $tracker->track($states->get('bar')));
@@ -39,9 +39,9 @@ final class ExecutionTrackerTest extends TestCase
 
     public function testGetExecutionCount()
     {
-        $state_machine = $this->createStateMachine();
-        $states = $state_machine->getStates();
-        $tracker = new ExecutionTracker($state_machine);
+        $stateMachine = $this->createStateMachine();
+        $states = $stateMachine->getStates();
+        $tracker = new ExecutionTracker($stateMachine);
         $tracker->track($states->get('initial'));
         $tracker->track($states->get('foo'));
         $tracker->track($states->get('bar'));
@@ -54,9 +54,9 @@ final class ExecutionTrackerTest extends TestCase
 
     public function testDetectExecutionLoop()
     {
-        $state_machine = $this->createStateMachine();
-        $states = $state_machine->getStates();
-        $tracker = new ExecutionTracker($state_machine);
+        $stateMachine = $this->createStateMachine();
+        $states = $stateMachine->getStates();
+        $tracker = new ExecutionTracker($stateMachine);
         $tracker->track($states->get('initial'));
         for ($i = 0; $i < StateMachine::MAX_CYCLES + 1; $i++) {
             $tracker->track($states->get('foo'));

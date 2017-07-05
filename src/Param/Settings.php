@@ -10,15 +10,10 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Param;
 
-use Daikon\StateMachine\Param\ParamHolderTrait;
-
 final class Settings implements ParamHolderInterface
 {
     use ParamHolderTrait;
 
-    /**
-     * @param mixed[] $params
-     */
     public function __construct(array $params = [])
     {
         $this->params = $params;

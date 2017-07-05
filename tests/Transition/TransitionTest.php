@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Tests\Transition;
 
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Daikon\StateMachine\Param\Input;
 use Daikon\StateMachine\Param\Output;
 use Daikon\StateMachine\Param\Settings;
 use Daikon\StateMachine\Tests\TestCase;
 use Daikon\StateMachine\Transition\ExpressionConstraint;
 use Daikon\StateMachine\Transition\Transition;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class TransitionTest extends TestCase
 {

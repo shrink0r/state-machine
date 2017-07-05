@@ -10,25 +10,24 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Tests\State;
 
-use Shrink0r\PhpSchema\Factory;
-use Shrink0r\PhpSchema\Ok;
-use Shrink0r\PhpSchema\Schema;
-use Shrink0r\PhpSchema\SchemaInterface;
 use Daikon\StateMachine\Param\Input;
 use Daikon\StateMachine\Param\Output;
 use Daikon\StateMachine\State\StateInterface;
 use Daikon\StateMachine\State\Validator;
 use Daikon\StateMachine\Tests\TestCase;
+use Shrink0r\PhpSchema\Factory;
+use Shrink0r\PhpSchema\Schema;
+use Shrink0r\PhpSchema\SchemaInterface;
 
 final class ValidatorTest extends TestCase
 {
-    private static $default_schema = [ 'type' => 'assoc', 'properties' =>  [ ':any_name:' => [ 'type' => 'any' ] ] ];
+    private static $defaultSchema = [ 'type' => 'assoc', 'properties' =>  [ ':any_name:' => [ 'type' => 'any' ] ] ];
 
     public function testGetInputSchema()
     {
         $validator = new Validator(
-            new Schema('input_schema', self::$default_schema, new Factory),
-            new Schema('output_schema', self::$default_schema, new Factory)
+            new Schema('input_schema', self::$defaultSchema, new Factory),
+            new Schema('output_schema', self::$defaultSchema, new Factory)
         );
         $this->assertInstanceOf(SchemaInterface::CLASS, $validator->getInputSchema());
     }
@@ -36,8 +35,8 @@ final class ValidatorTest extends TestCase
     public function testGetOutputSchema()
     {
         $validator = new Validator(
-            new Schema('input_schema', self::$default_schema, new Factory),
-            new Schema('output_schema', self::$default_schema, new Factory)
+            new Schema('input_schema', self::$defaultSchema, new Factory),
+            new Schema('output_schema', self::$defaultSchema, new Factory)
         );
         $this->assertInstanceOf(SchemaInterface::CLASS, $validator->getOutputSchema());
     }
@@ -45,21 +44,21 @@ final class ValidatorTest extends TestCase
     public function testValidateInput()
     {
         $validator = new Validator(
-            new Schema('input_schema', self::$default_schema, new Factory),
-            new Schema('output_schema', self::$default_schema, new Factory)
+            new Schema('input_schema', self::$defaultSchema, new Factory),
+            new Schema('output_schema', self::$defaultSchema, new Factory)
         );
-        $mocked_state = $this->createMock(StateInterface::CLASS);
-        $validator->validateInput($mocked_state, new Input([ 'foo' => 'bar' ]));
+        $mockedState = $this->createMock(StateInterface::CLASS);
+        $validator->validateInput($mockedState, new Input([ 'foo' => 'bar' ]));
     }
 
     public function testValidateOutput()
     {
         $validator = new Validator(
-            new Schema('input_schema', self::$default_schema, new Factory),
-            new Schema('output_schema', self::$default_schema, new Factory)
+            new Schema('input_schema', self::$defaultSchema, new Factory),
+            new Schema('output_schema', self::$defaultSchema, new Factory)
         );
-        $mocked_state = $this->createMock(StateInterface::CLASS);
-        $validator->validateOutput($mocked_state, new Output('initial', [ 'foo' => 'bar' ]));
+        $mockedState = $this->createMock(StateInterface::CLASS);
+        $validator->validateOutput($mockedState, new Output('initial', [ 'foo' => 'bar' ]));
     }
 
     /**
@@ -67,14 +66,14 @@ final class ValidatorTest extends TestCase
      */
     public function testInvalidInput()
     {
-        $input_schema = self::$default_schema;
-        $input_schema['properties'] = [ 'foo' => [ 'type' => 'bool', 'required' => true ] ];
+        $inputSchema = self::$defaultSchema;
+        $inputSchema['properties'] = [ 'foo' => [ 'type' => 'bool', 'required' => true ] ];
         $validator = new Validator(
-            new Schema('input_schema', $input_schema, new Factory),
-            new Schema('output_schema', self::$default_schema, new Factory)
+            new Schema('input_schema', $inputSchema, new Factory),
+            new Schema('output_schema', self::$defaultSchema, new Factory)
         );
-        $mocked_state = $this->createMock(StateInterface::CLASS);
-        $validator->validateInput($mocked_state, new Input([ 'foo' => 'bar' ]));
+        $mockedState = $this->createMock(StateInterface::CLASS);
+        $validator->validateInput($mockedState, new Input([ 'foo' => 'bar' ]));
     } // @codeCoverageIgnore
 
     /**
@@ -82,13 +81,13 @@ final class ValidatorTest extends TestCase
      */
     public function testInvalidOutput()
     {
-        $output_schema = self::$default_schema;
-        $output_schema['properties'] = [ 'foo' => [ 'type' => 'bool', 'required' => true ] ];
+        $outputSchema = self::$defaultSchema;
+        $outputSchema['properties'] = [ 'foo' => [ 'type' => 'bool', 'required' => true ] ];
         $validator = new Validator(
-            new Schema('input_schema', self::$default_schema, new Factory),
-            new Schema('output_schema', $output_schema, new Factory)
+            new Schema('input_schema', self::$defaultSchema, new Factory),
+            new Schema('output_schema', $outputSchema, new Factory)
         );
-        $mocked_state = $this->createMock(StateInterface::CLASS);
-        $validator->validateOutput($mocked_state, new Output('initial', [ 'foo' => 'bar' ]));
+        $mockedState = $this->createMock(StateInterface::CLASS);
+        $validator->validateOutput($mockedState, new Output('initial', [ 'foo' => 'bar' ]));
     } // @codeCoverageIgnore
 }

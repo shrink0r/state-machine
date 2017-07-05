@@ -10,43 +10,41 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Builder;
 
-use Shrink0r\Monatic\Maybe;
-use Shrink0r\PhpSchema\Error;
-use Symfony\Component\Yaml\Parser;
-use Daikon\StateMachine\Builder\Factory;
-use Daikon\StateMachine\Builder\StateMachineBuilderInterface;
 use Daikon\StateMachine\Error\ConfigError;
 use Daikon\StateMachine\StateMachine;
 use Daikon\StateMachine\StateMachineInterface;
+use Shrink0r\Monatic\Maybe;
+use Shrink0r\PhpSchema\Error;
+use Symfony\Component\Yaml\Parser;
 
 final class YamlStateMachineBuilder implements StateMachineBuilderInterface
 {
     private $parser;
 
-    private $yaml_filepath;
+    private $yamlFilepath;
 
     private $factory;
 
-    public function __construct(string $yaml_filepath, FactoryInterface $factory = null)
+    public function __construct(string $yamlFilepath, FactoryInterface $factory = null)
     {
         $this->parser = new Parser;
-        if (!is_readable($yaml_filepath)) {
-            throw new ConfigError("Trying to load non-existant statemachine definition at: $yaml_filepath");
+        if (!is_readable($yamlFilepath)) {
+            throw new ConfigError("Trying to load non-existent state-machine definition at: $yamlFilepath");
         }
-        $this->yaml_filepath = $yaml_filepath;
+        $this->yamlFilepath = $yamlFilepath;
         $this->factory = $factory ?? new Factory;
     }
 
     public function build(): StateMachineInterface
     {
-        $data = $this->parser->parse(file_get_contents($this->yaml_filepath));
+        $data = $this->parser->parse(file_get_contents($this->yamlFilepath));
         $result = (new StateMachineSchema)->validate($data);
         if ($result instanceof Error) {
-            throw new ConfigError('Invalid statemachine configuration given: '.print_r($result->unwrap(), true));
+            throw new ConfigError('Invalid state-machine configuration given: '.print_r($result->unwrap(), true));
         }
         list($states, $transitions) = $this->realizeConfig($data['states']);
-        $state_machine_class = Maybe::unit($data)->class->get() ?? StateMachine::CLASS;
-        return (new StateMachineBuilder($state_machine_class))
+        $stateMachineClass = Maybe::unit($data)->class->get() ?? StateMachine::CLASS;
+        return (new StateMachineBuilder($stateMachineClass))
             ->addStateMachineName($data['name'])
             ->addStates($states)
             ->addTransitions($transitions)
@@ -57,16 +55,16 @@ final class YamlStateMachineBuilder implements StateMachineBuilderInterface
     {
         $states = [];
         $transitions = [];
-        foreach ($config as $name => $state_config) {
-            $states[] = $this->factory->createState($name, $state_config);
-            if (!is_array($state_config)) {
+        foreach ($config as $name => $stateConfig) {
+            $states[] = $this->factory->createState($name, $stateConfig);
+            if (!is_array($stateConfig)) {
                 continue;
             }
-            foreach ($state_config['transitions'] as $key => $transition_config) {
-                if (is_string($transition_config)) {
-                    $transition_config = [ 'when' => $transition_config ];
+            foreach ($stateConfig['transitions'] as $key => $transitionConfig) {
+                if (is_string($transitionConfig)) {
+                    $transitionConfig = [ 'when' => $transitionConfig ];
                 }
-                $transitions[] = $this->factory->createTransition($name, $key, $transition_config);
+                $transitions[] = $this->factory->createTransition($name, $key, $transitionConfig);
             }
         }
         return [ $states, $transitions ];

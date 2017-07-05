@@ -11,20 +11,18 @@ declare(strict_types=1);
 namespace Daikon\StateMachine\State;
 
 use Countable;
+use Daikon\StateMachine\Error\InvalidStructure;
 use Ds\Set;
 use IteratorAggregate;
 use Traversable;
-use Daikon\StateMachine\Error\InvalidStructure;
-use Daikon\StateMachine\State\StateInterface;
-use Daikon\StateMachine\State\StateMap;
 
 final class StateSet implements IteratorAggregate, Countable
 {
-    private $internal_set;
+    private $internalSet;
 
     public function __construct(array $states = [])
     {
-        $this->internal_set = new Set(
+        $this->internalSet = new Set(
             (function (StateInterface ...$states) {
                 return $states;
             })(...$states)
@@ -33,63 +31,63 @@ final class StateSet implements IteratorAggregate, Countable
 
     public function splat(): array
     {
-        $initial_state = null;
-        $all_states = new StateMap;
-        $final_states = new StateMap;
-        foreach ($this->internal_set as $state) {
+        $initialState = null;
+        $allStates = new StateMap;
+        $finalStates = new StateMap;
+        foreach ($this->internalSet as $state) {
             if ($state->isFinal()) {
                 if ($state->isInitial()) {
                     throw new InvalidStructure('Trying to add state as initial and final at the same time.');
                 }
-                $final_states = $final_states->put($state);
+                $finalStates = $finalStates->put($state);
             }
             if ($state->isInitial()) {
-                if ($initial_state !== null) {
+                if ($initialState !== null) {
                     throw new InvalidStructure('Trying to add more than one initial state.');
                 }
-                $initial_state = $state;
+                $initialState = $state;
             }
-            $all_states = $all_states->put($state);
+            $allStates = $allStates->put($state);
         }
-        if (!$initial_state) {
-            throw new InvalidStructure('Trying to create statemachine without an initial state.');
+        if (!$initialState) {
+            throw new InvalidStructure('Trying to create state-machine without an initial state.');
         }
-        if ($final_states->count() === 0) {
-            throw new InvalidStructure('Trying to create statemachine without at least one final state.');
+        if ($finalStates->count() === 0) {
+            throw new InvalidStructure('Trying to create state-machine without at least one final state.');
         }
-        return [ $initial_state, $all_states, $final_states ];
+        return [ $initialState, $allStates, $finalStates ];
     }
 
     public function add(StateInterface $state): self
     {
-        $cloned_set = clone $this;
-        $cloned_set->internal_set->add($state);
+        $clonedSet = clone $this;
+        $clonedSet->internalSet->add($state);
 
-        return $cloned_set;
+        return $clonedSet;
     }
 
     public function contains(StateInterface $state): bool
     {
-        return $this->internal_set->contains($state);
+        return $this->internalSet->contains($state);
     }
 
     public function count(): int
     {
-        return $this->internal_set->count();
+        return $this->internalSet->count();
     }
 
     public function getIterator(): Traversable
     {
-        return $this->internal_set->getIterator();
+        return $this->internalSet->getIterator();
     }
 
     public function toArray(): array
     {
-        return $this->internal_set->toArray();
+        return $this->internalSet->toArray();
     }
 
     public function __clone()
     {
-        $this->internal_set = clone $this->internal_set;
+        $this->internalSet = clone $this->internalSet;
     }
 }

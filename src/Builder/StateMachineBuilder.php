@@ -10,16 +10,15 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Builder;
 
-use Ds\Map;
-use Daikon\StateMachine\Builder\StateMachineBuilderInterface;
 use Daikon\StateMachine\Error\InvalidStructure;
 use Daikon\StateMachine\Error\MissingImplementation;
 use Daikon\StateMachine\Error\UnknownState;
-use Daikon\StateMachine\StateMachineInterface;
 use Daikon\StateMachine\State\StateInterface;
 use Daikon\StateMachine\State\StateSet;
+use Daikon\StateMachine\StateMachineInterface;
 use Daikon\StateMachine\Transition\TransitionInterface;
 use Daikon\StateMachine\Transition\TransitionSet;
+use Ds\Map;
 
 final class StateMachineBuilder implements StateMachineBuilderInterface
 {
@@ -27,21 +26,21 @@ final class StateMachineBuilder implements StateMachineBuilderInterface
 
     private $transitions;
 
-    private $state_machine_name;
+    private $stateMachineName;
 
-    private $state_machine_class;
+    private $stateMachineClass;
 
-    public function __construct(string $state_machine_class)
+    public function __construct(string $stateMachineClass)
     {
         $this->states = new Map;
         $this->transitions = new Map;
-        $this->state_machine_class = $state_machine_class;
-        if (!class_exists($this->state_machine_class)) {
-            throw new MissingImplementation('Trying to create statemachine from non-existant class.');
+        $this->stateMachineClass = $stateMachineClass;
+        if (!class_exists($this->stateMachineClass)) {
+            throw new MissingImplementation('Trying to create state-machine from non-existent class.');
         }
-        if (!in_array(StateMachineInterface::CLASS, class_implements($this->state_machine_class))) {
+        if (!in_array(StateMachineInterface::CLASS, class_implements($this->stateMachineClass))) {
             throw new MissingImplementation(
-                'Trying to build statemachine that does not implement required '.StateMachineInterface::CLASS
+                'Trying to build state-machine that does not implement required '.StateMachineInterface::CLASS
             );
         }
     }
@@ -50,13 +49,13 @@ final class StateMachineBuilder implements StateMachineBuilderInterface
     {
         $states = new StateSet($this->states->values()->toArray());
         $transitions = new TransitionSet($this->transitions->values()->toArray());
-        return new $this->state_machine_class($this->state_machine_name, $states, $transitions);
+        return new $this->stateMachineClass($this->stateMachineName, $states, $transitions);
     }
 
     public function addStateMachineName(string $state_machine_name): self
     {
         $builder = clone $this;
-        $builder->state_machine_name = $state_machine_name;
+        $builder->stateMachineName = $state_machine_name;
         return $builder;
     }
 
@@ -84,14 +83,14 @@ final class StateMachineBuilder implements StateMachineBuilderInterface
         if (!$this->states->hasKey($transition->getTo())) {
             throw new UnknownState('Trying to add transition to unknown state: ' . $transition->getTo());
         }
-        $transition_key = $transition->getFrom().$transition->getTo();
-        if ($this->transitions->hasKey($transition_key)) {
+        $transitionKey = $transition->getFrom().$transition->getTo();
+        if ($this->transitions->hasKey($transitionKey)) {
             throw new InvalidStructure(
                 sprintf('Trying to add same transition twice: %s -> %s', $transition->getFrom(), $transition->getTo())
             );
         }
         $builder = clone $this;
-        $builder->transitions[$transition_key] = $transition;
+        $builder->transitions[$transitionKey] = $transition;
         return $builder;
     }
 

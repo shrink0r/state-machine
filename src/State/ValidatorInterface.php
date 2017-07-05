@@ -10,10 +10,9 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\State;
 
-use Shrink0r\PhpSchema\SchemaInterface;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\OutputInterface;
-use Daikon\StateMachine\State\StateInterface;
+use Shrink0r\PhpSchema\SchemaInterface;
 
 interface ValidatorInterface
 {

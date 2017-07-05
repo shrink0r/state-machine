@@ -19,33 +19,33 @@ final class TransitionSetTest extends TestCase
 {
     public function testCount()
     {
-        $transition_set = new TransitionSet($this->buildTransitionArray());
-        $this->assertCount(4, $transition_set);
+        $transitionSet = new TransitionSet($this->buildTransitionArray());
+        $this->assertCount(4, $transitionSet);
     }
 
     public function testAdd()
     {
-        $transition_set = (new TransitionSet)->add(new Transition('state1', 'state2'));
-        $this->assertCount(1, $transition_set);
+        $transitionSet = (new TransitionSet)->add(new Transition('state1', 'state2'));
+        $this->assertCount(1, $transitionSet);
     }
 
     public function testContains()
     {
-        $transition_set = new TransitionSet($this->buildTransitionArray());
-        $this->assertTrue($transition_set->contains(new Transition('foo', 'bar')));
-        $this->assertFalse($transition_set->contains(new Transition('bar', 'foo')));
+        $transitionSet = new TransitionSet($this->buildTransitionArray());
+        $this->assertTrue($transitionSet->contains(new Transition('foo', 'bar')));
+        $this->assertFalse($transitionSet->contains(new Transition('bar', 'foo')));
     }
 
     public function testFilter()
     {
-        $transition_set = (new TransitionSet($this->buildTransitionArray()))
+        $transitionSet = (new TransitionSet($this->buildTransitionArray()))
             ->filter(function (TransitionInterface $transition) {
                 return $transition->getTo() === 'bar';
             });
-        $bar_transition = $transition_set->toArray()[0];
-        $this->assertCount(1, $transition_set);
-        $this->assertEquals('foo', $bar_transition->getFrom());
-        $this->assertEquals('bar', $bar_transition->getTo());
+        $barTransition = $transitionSet->toArray()[0];
+        $this->assertCount(1, $transitionSet);
+        $this->assertEquals('foo', $barTransition->getFrom());
+        $this->assertEquals('bar', $barTransition->getTo());
     }
 
     private function buildTransitionArray()

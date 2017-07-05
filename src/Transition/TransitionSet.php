@@ -14,15 +14,14 @@ use Countable;
 use Ds\Set;
 use IteratorAggregate;
 use Traversable;
-use Daikon\StateMachine\Transition\TransitionInterface;
 
 final class TransitionSet implements IteratorAggregate, Countable
 {
-    private $internal_set;
+    private $internalSet;
 
     public function __construct(array $transitions = [])
     {
-        $this->internal_set = new Set(
+        $this->internalSet = new Set(
             (function (TransitionInterface ...$transitions) {
                 return $transitions;
             })(...$transitions)
@@ -31,7 +30,7 @@ final class TransitionSet implements IteratorAggregate, Countable
 
     public function add(TransitionInterface $transition): self
     {
-        $transitions = $this->internal_set->toArray();
+        $transitions = $this->internalSet->toArray();
         $transitions[] = $transition;
 
         return new static($transitions);
@@ -39,9 +38,9 @@ final class TransitionSet implements IteratorAggregate, Countable
 
     public function contains(TransitionInterface $transition): bool
     {
-        foreach ($this->internal_set as $cur_transition) {
-            if ($cur_transition->getFrom() === $transition->getFrom()
-                && $cur_transition->getTo() === $transition->getTo()
+        foreach ($this->internalSet as $curTransition) {
+            if ($curTransition->getFrom() === $transition->getFrom()
+                && $curTransition->getTo() === $transition->getTo()
             ) {
                 return true;
             }
@@ -52,28 +51,28 @@ final class TransitionSet implements IteratorAggregate, Countable
     public function filter(callable $callback): self
     {
         $set = clone $this;
-        $set->internal_set = $this->internal_set->filter($callback);
+        $set->internalSet = $this->internalSet->filter($callback);
 
         return $set;
     }
 
     public function getIterator(): Traversable
     {
-        return $this->internal_set->getIterator();
+        return $this->internalSet->getIterator();
     }
 
     public function count(): int
     {
-        return $this->internal_set->count();
+        return $this->internalSet->count();
     }
 
     public function toArray(): array
     {
-        return $this->internal_set->toArray();
+        return $this->internalSet->toArray();
     }
 
     public function __clone()
     {
-        $this->internal_set = clone $this->internal_set;
+        $this->internalSet = clone $this->internalSet;
     }
 }

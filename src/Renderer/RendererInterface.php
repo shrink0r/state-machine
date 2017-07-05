@@ -14,5 +14,5 @@ use Daikon\StateMachine\StateMachineInterface;
 
 interface RendererInterface
 {
-    public function render(StateMachineInterface $state_machine);
+    public function render(StateMachineInterface $stateMachine);
 }

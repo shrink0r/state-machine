@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Tests\Param;
 
-use Daikon\StateMachine\Param\Settings;
 use Daikon\StateMachine\Param\ParamHolderInterface;
+use Daikon\StateMachine\Param\Settings;
 use Daikon\StateMachine\Tests\TestCase;
 
 final class SettingsTest extends TestCase
