@@ -49,7 +49,7 @@ final class StateMachineTest extends TestCase
             ))
             ->add(new Transition('foobar', 'bar'))
             ->add(new Transition('bar', 'final'));
-        $stateMachine = new stateMachine('test-machine', $states, $transitions);
+        $stateMachine = new StateMachine('test-machine', $states, $transitions);
         $intialOutput = $stateMachine->execute(new Input([ 'is_ready' => true ]), 'initial');
         $input = Input::fromOutput($intialOutput)->withEvent('on_signal');
         $output = $stateMachine->execute($input, $intialOutput->getCurrentState());
@@ -109,7 +109,7 @@ final class StateMachineTest extends TestCase
             ->add(new Transition('approval', 'archive'))
             ->add(new Transition('published', 'archive'))
             ->add(new Transition('archive', 'final'));
-        $stateMachine = new stateMachine('test-machine', $states, $transitions);
+        $stateMachine = new StateMachine('test-machine', $states, $transitions);
         $stateMachine->execute(new Input);
     } // @codeCoverageIgnore
 
@@ -136,7 +136,7 @@ Looks like there is a loop between: approval -> published -> archive');
             ->add(new Transition('published', 'archive'))
             ->add(new Transition('archive', 'approval'))
             ->add(new InactiveTransition('archive', 'final'));
-        $stateMachine = new stateMachine('test-machine', $states, $transitions);
+        $stateMachine = new StateMachine('test-machine', $states, $transitions);
         $stateMachine->execute(new Input);
     } // @codeCoverageIgnore
 
@@ -187,6 +187,6 @@ Looks like there is a loop between: approval -> published -> archive');
             ->add(new Transition('approval', 'published'))
             ->add(new Transition('published', 'archive'))
             ->add(new Transition('archive', 'final'));
-        return new stateMachine('test-machine', $states, $transitions);
+        return new StateMachine('test-machine', $states, $transitions);
     }
 }
