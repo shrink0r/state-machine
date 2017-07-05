@@ -98,14 +98,14 @@ final class StateMachine implements StateMachineInterface
             return $this->getInitialState();
         }
         if (!$this->states->has($stateName)) {
-            throw new ExecutionException("Trying to start state-machine execution at unknown state: ".$stateName);
+            throw new ExecutionException('Trying to start state-machine execution at unknown state: '.$stateName);
         }
         $startState = $this->states->get($stateName);
         if ($startState->isFinal()) {
-            throw new ExecutionException("Trying to (re)execute state-machine at final state: ".$stateName);
+            throw new ExecutionException('Trying to (re)execute state-machine at final state: '.$stateName);
         }
         if ($startState->isInteractive() && !$input->hasEvent()) {
-            throw new ExecutionException("Trying to resume state-machine executing without providing an event/signal.");
+            throw new ExecutionException('Trying to resume state-machine executing without providing an event/signal.');
         }
         return $startState->isInteractive()
             ? $this->activateTransition($input, Output::fromInput($startState->getName(), $input))

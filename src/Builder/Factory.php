@@ -69,16 +69,18 @@ final class Factory implements FactoryInterface
             $this->expressionEngine
         );
         if ($state->final->get() && !$stateInstance->isFinal()) {
-            throw new ConfigException("Trying to provide custom state that isn't final but marked as final in config.");
+            throw new ConfigException(
+                'Trying to provide custom state that is not final but marked as final in config.'
+            );
         }
         if ($state->initial->get() && !$stateInstance->isInitial()) {
             throw new ConfigException(
-                "Trying to provide custom state that isn't initial but marked as initial in config."
+                'Trying to provide custom state that is not initial but marked as initial in config.'
             );
         }
         if ($state->interactive->get() && !$stateInstance->isInteractive()) {
             throw new ConfigException(
-                "Trying to provide custom state that isn't interactive but marked as interactive in config."
+                'Trying to provide custom state that is not interactive but marked as interactive in config.'
             );
         }
         return $stateInstance;

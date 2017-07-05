@@ -19,7 +19,7 @@ class InvalidInput extends DomainException implements ExceptionInterface
     public function __construct(array $validationErrors, string $msg = '')
     {
         $this->validationErrors = $validationErrors;
-        parent::__construct($msg.PHP_EOL.$this);
+        parent::__construct("$msg\n".$this);
     }
 
     public function getValidationErrors(): array
@@ -31,7 +31,7 @@ class InvalidInput extends DomainException implements ExceptionInterface
     {
         $errors = [];
         foreach ($this->getValidationErrors() as $propName => $errors) {
-            $errors[] = $propName.": ".implode(', ', $errors);
+            $errors[] = $propName.': '.implode(', ', $errors);
         }
         return implode("\n", $errors);
     }

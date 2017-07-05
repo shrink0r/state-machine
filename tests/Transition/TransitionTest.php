@@ -26,7 +26,7 @@ final class TransitionTest extends TestCase
             'initial',
             'foo',
             new Settings,
-            [ new ExpressionConstraint("input.get('foo') == 'bar'", new ExpressionLanguage) ]
+            [ new ExpressionConstraint('input.get("foo") == "bar"', new ExpressionLanguage) ]
         );
         $this->assertTrue($transition->isActivatedBy(new Input([ 'foo' => 'bar' ]), new Output('state1')));
         $this->assertFalse($transition->isActivatedBy(new Input([ 'foo' => 'snafu' ]), new Output('state1')));
@@ -52,7 +52,7 @@ final class TransitionTest extends TestCase
             'initial',
             'foo',
             new Settings,
-            [ new ExpressionConstraint("input.get('foo') == 'bar'", new ExpressionLanguage) ]
+            [ new ExpressionConstraint('input.get("foo") == "bar"', new ExpressionLanguage) ]
         );
         $this->assertTrue($transition->hasConstraints());
     }
@@ -63,7 +63,7 @@ final class TransitionTest extends TestCase
             'initial',
             'foo',
             new Settings,
-            [ new ExpressionConstraint("input.get('foo') == 'bar'", new ExpressionLanguage) ]
+            [ new ExpressionConstraint('input.get("foo") == "bar"', new ExpressionLanguage) ]
         );
         $this->assertCount(1, $transition->getConstraints());
     }

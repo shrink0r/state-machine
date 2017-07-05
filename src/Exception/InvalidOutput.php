@@ -31,8 +31,8 @@ class InvalidOutput extends DomainException implements ExceptionInterface
     {
         $errors = [];
         foreach ($this->getValidationErrors() as $prop_name => $errors) {
-            $errors[] = $prop_name.": ".implode(', ', $errors);
+            $errors[] = $prop_name.': '.implode(', ', $errors);
         }
-        return implode("\n", $errors);
+        return implode(PHP_EOL, $errors);
     }
 }

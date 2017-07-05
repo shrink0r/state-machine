@@ -29,7 +29,7 @@ final class YamlStateMachineBuilder implements StateMachineBuilderInterface
     {
         $this->parser = new Parser;
         if (!is_readable($yamlFilepath)) {
-            throw new ConfigException("Trying to load non-existent state-machine definition at: $yamlFilepath");
+            throw new ConfigException('Trying to load non-existent state-machine definition at: '.$yamlFilepath);
         }
         $this->yamlFilepath = $yamlFilepath;
         $this->factory = $factory ?? new Factory;

@@ -25,14 +25,14 @@ final class StateMachineSchema implements SchemaInterface
         $this->internalSchema = new Schema('state-machine', [
             'type' => 'assoc',
             'properties' => [
-                "name" => [ "type" => "string" ],
-                "class" => [ "type" => "fqcn", "required" => false ],
-                "states" => [
-                    "type" => "assoc",
-                    "properties" => [ ":any_name:" => $this->getStateSchema() ]
+                'name' => [ 'type' => 'string' ],
+                'class' => [ 'type' => 'fqcn', 'required' => false ],
+                'states' => [
+                    'type' => 'assoc',
+                    'properties' => [ ':any_name:' => $this->getStateSchema() ]
                 ]
             ],
-            "customTypes" => [ "transition" => $this->getTransitionSchema() ]
+            'customTypes' => [ 'transition' => $this->getTransitionSchema() ]
         ], new Factory);
     }
 
@@ -69,58 +69,58 @@ final class StateMachineSchema implements SchemaInterface
     private function getStateSchema(): array
     {
         return [
-            "type" => "assoc" ,
-            "required" => false,
-            "properties" => [
-                "class" => [ "type" => "fqcn", "required" => false ],
-                "initial" => [
-                    "type" => "bool",
-                    "required" => false
+            'type' => 'assoc' ,
+            'required' => false,
+            'properties' => [
+                'class' => [ 'type' => 'fqcn', 'required' => false ],
+                'initial' => [
+                    'type' => 'bool',
+                    'required' => false
                 ],
-                "final" => [
-                    "type" => "bool",
-                    "required" => false
+                'final' => [
+                    'type' => 'bool',
+                    'required' => false
                 ],
-                "interactive" => [
-                    "type" => "bool",
-                    "required" => false
+                'interactive' => [
+                    'type' => 'bool',
+                    'required' => false
                 ],
-                "output" => [
-                    "type" => "assoc",
-                    "required" => false,
-                    "properties" => [
-                        ":any_name:" => [ "type" => "any" ]
+                'output' => [
+                    'type' => 'assoc',
+                    'required' => false,
+                    'properties' => [
+                        ':any_name:' => [ 'type' => 'any' ]
                     ]
                 ],
-                "input_schema" =>  [
-                    "type" => "assoc",
-                    "required" => false,
-                    "properties" => [
-                        ":any_name:" => [ "type" => "any" ]
+                'input_schema' =>  [
+                    'type' => 'assoc',
+                    'required' => false,
+                    'properties' => [
+                        ':any_name:' => [ 'type' => 'any' ]
                     ]
                 ],
-                "output_schema" =>  [
-                    "type" => "assoc",
-                    "required" => false,
-                    "properties" => [
-                        ":any_name:" => [ "type" => "any" ]
+                'output_schema' =>  [
+                    'type' => 'assoc',
+                    'required' => false,
+                    'properties' => [
+                        ':any_name:' => [ 'type' => 'any' ]
                     ]
                 ],
-                "settings" =>  [
-                    "type" => "assoc",
-                    "required" => false,
-                    "properties" => [
-                        ":any_name:" => [ "type" => "any" ]
+                'settings' =>  [
+                    'type' => 'assoc',
+                    'required' => false,
+                    'properties' => [
+                        ':any_name:' => [ 'type' => 'any' ]
                     ]
                 ],
-                "transitions" =>  [
-                    "type" => "assoc",
-                    "required" => true,
-                    "properties" => [
-                        ":any_name:" => [
-                            "type" => "enum" ,
-                            "required" => false,
-                            "one_of" => [ "string", "&transition" ]
+                'transitions' =>  [
+                    'type' => 'assoc',
+                    'required' => true,
+                    'properties' => [
+                        ':any_name:' => [
+                            'type' => 'enum' ,
+                            'required' => false,
+                            'one_of' => [ 'string', '&transition' ]
                         ]
                     ]
                 ]
@@ -131,19 +131,19 @@ final class StateMachineSchema implements SchemaInterface
     private function getTransitionSchema(): array
     {
         return [
-            "type" => "assoc",
-            "properties" => [
-                "class" => [ "type" => "fqcn", "required" => false ],
-                "settings" =>  [
-                    "type" => "assoc",
-                    "required" => false,
-                    "properties" => [
-                        ":any_name:" => [ "type" => "any" ]
+            'type' => 'assoc',
+            'properties' => [
+                'class' => [ 'type' => 'fqcn', 'required' => false ],
+                'settings' =>  [
+                    'type' => 'assoc',
+                    'required' => false,
+                    'properties' => [
+                        ':any_name:' => [ 'type' => 'any' ]
                     ],
                 ],
-                "when" => [
-                    "type" => "any",
-                    "required" => false
+                'when' => [
+                    'type' => 'any',
+                    'required' => false
                 ]
             ]
         ];

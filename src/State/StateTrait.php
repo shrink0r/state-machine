@@ -39,7 +39,11 @@ trait StateTrait
         $this->expressionEngine = $expressionEngine;
         foreach ($this->getRequiredSettings() as $settingName) {
             if (!$this->settings->has($settingName)) {
-                throw new ConfigException("Trying to configure state '$name' without required setting '$settingName'.");
+                throw new ConfigException(sprintf(
+                    'Trying to configure state "%s" without required setting "%s".',
+                    $name,
+                    $settingName
+                ));
             }
         }
     }

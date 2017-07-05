@@ -35,7 +35,7 @@ final class Validator implements ValidatorInterface
         if ($result instanceof Error) {
             throw new InvalidInput(
                 $result->unwrap(),
-                sprintf("Trying to execute state '%s' with invalid input.", $state->getName())
+                sprintf('Trying to execute state "%s" with invalid input.', $state->getName())
             );
         }
     }
@@ -46,7 +46,7 @@ final class Validator implements ValidatorInterface
         if ($result instanceof Error) {
             throw new InvalidOutput(
                 $result->unwrap(),
-                sprintf("Trying to return invalid output from state: '%s'", $state->getName())
+                sprintf('Trying to return invalid output from state: "%s"', $state->getName())
             );
         }
     }

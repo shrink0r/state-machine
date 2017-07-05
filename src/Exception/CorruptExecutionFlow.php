@@ -20,10 +20,10 @@ class CorruptExecutionFlow extends RuntimeException implements ExceptionInterfac
         $cycleCrumbs = $executionTracker->detectExecutionLoop();
         $message = sprintf("Trying to execute more than the allowed number of %d workflow steps.\n", $maxCycles);
         if (count($cycleCrumbs) === count($executionTracker->getBreadcrumbs())) {
-            $message .= "It is likely that an intentional cycle inside the workflow isn't properly exiting.\n".
-                "The executed states where:\n";
+            $message .= "It is likely that an intentional cycle inside the workflow is not properly exiting.\n"
+                ."The executed states where:\n";
         } else {
-            $message .= "Looks like there is a loop between: ";
+            $message .= 'Looks like there is a loop between: ';
         }
         $message .= implode(' -> ', $cycleCrumbs->toArray());
         return new self($message);
