@@ -1,0 +1,9 @@
+name: video-transcoding
+states:
+  new:
+    initial: true
+    class: Daikon\StateMachine\Tests\Builder\Fixture\InconsistentInitial
+    transitions:
+      done: ~
+
+  done: ~
