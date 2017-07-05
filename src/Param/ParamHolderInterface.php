@@ -16,9 +16,9 @@ interface ParamHolderInterface
 
     public function has(string $paramName): bool;
 
-    public function withParam(string $paramName, $paramValue, bool $treatNameAsPath = true): self;
+    public function withParam(string $paramName, $paramValue, bool $treatNameAsPath = true): ParamHolderInterface;
 
-    public function withParams(array $params): self;
+    public function withParams(array $params): ParamHolderInterface;
 
     public function withoutParam(string $paramName): ParamHolderInterface;
 

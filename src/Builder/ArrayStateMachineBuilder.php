@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Builder;
 
-use Daikon\StateMachine\Error\ConfigError;
+use Daikon\StateMachine\Exception\ConfigException;
 use Daikon\StateMachine\StateMachine;
 use Daikon\StateMachine\StateMachineInterface;
 use Shrink0r\Monatic\Maybe;
@@ -33,7 +33,7 @@ final class ArrayStateMachineBuilder implements StateMachineBuilderInterface
         $data = $this->config;
         $result = (new StateMachineSchema)->validate($data);
         if ($result instanceof Error) {
-            throw new ConfigError('Invalid state-machine configuration given: '.print_r($result->unwrap(), true));
+            throw new ConfigException('Invalid state-machine configuration given: '.print_r($result->unwrap(), true));
         }
         list($states, $transitions) = $this->realizeConfig($data['states']);
         $stateMachineClass = Maybe::unit($this->config)->class->get() ?? StateMachine::CLASS;

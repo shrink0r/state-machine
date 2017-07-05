@@ -8,12 +8,12 @@
 
 declare(strict_types=1);
 
-namespace Daikon\StateMachine\Error;
+namespace Daikon\StateMachine\Exception;
 
 use Daikon\StateMachine\State\ExecutionTracker;
 use RuntimeException;
 
-class CorruptExecutionFlow extends RuntimeException implements ErrorInterface
+class CorruptExecutionFlow extends RuntimeException implements ExceptionInterface
 {
     public static function fromExecutionTracker(ExecutionTracker $executionTracker, int $maxCycles): self
     {

@@ -43,7 +43,7 @@ final class StateMachineBuilderTest extends TestCase
     }
 
     /**
-     * @expectedException Daikon\StateMachine\Error\MissingImplementation
+     * @expectedException Daikon\StateMachine\Exception\MissingImplementation
      */
     public function testMissingInterface()
     {
@@ -51,7 +51,7 @@ final class StateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\MissingImplementation
+     * @expectedException Daikon\StateMachine\Exception\MissingImplementation
      */
     public function testNonExistantClass()
     {
@@ -59,7 +59,7 @@ final class StateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\UnknownState
+     * @expectedException Daikon\StateMachine\Exception\UnknownState
      */
     public function testUnknownFromState()
     {
@@ -72,7 +72,7 @@ final class StateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\UnknownState
+     * @expectedException Daikon\StateMachine\Exception\UnknownState
      */
     public function testUnknownToState()
     {
@@ -85,7 +85,7 @@ final class StateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\InvalidStructure
+     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
      */
     public function testDuplicateTransition()
     {

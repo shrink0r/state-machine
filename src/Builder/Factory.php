@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Builder;
 
-use Daikon\StateMachine\Error\ConfigError;
-use Daikon\StateMachine\Error\MissingImplementation;
+use Daikon\StateMachine\Exception\ConfigException;
+use Daikon\StateMachine\Exception\MissingImplementation;
 use Daikon\StateMachine\Param\Settings;
 use Daikon\StateMachine\State\FinalState;
 use Daikon\StateMachine\State\InitialState;
@@ -69,13 +69,15 @@ final class Factory implements FactoryInterface
             $this->expressionEngine
         );
         if ($state->final->get() && !$stateInstance->isFinal()) {
-            throw new ConfigError("Trying to provide custom state that isn't final but marked as final in config.");
+            throw new ConfigException("Trying to provide custom state that isn't final but marked as final in config.");
         }
         if ($state->initial->get() && !$stateInstance->isInitial()) {
-            throw new ConfigError("Trying to provide custom state that isn't initial but marked as initial in config.");
+            throw new ConfigException(
+                "Trying to provide custom state that isn't initial but marked as initial in config."
+            );
         }
         if ($state->interactive->get() && !$stateInstance->isInteractive()) {
-            throw new ConfigError(
+            throw new ConfigException(
                 "Trying to provide custom state that isn't interactive but marked as interactive in config."
             );
         }

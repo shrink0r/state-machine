@@ -8,11 +8,9 @@
 
 declare(strict_types=1);
 
-namespace Daikon\StateMachine\Error;
+namespace Daikon\StateMachine\Exception;
 
-use DomainException;
-
-class InvalidStructure extends DomainException implements ErrorInterface
+interface ExceptionInterface
 {
 
 }

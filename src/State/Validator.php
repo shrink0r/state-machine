@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\State;
 
-use Daikon\StateMachine\Error\InvalidInput;
-use Daikon\StateMachine\Error\InvalidOutput;
+use Daikon\StateMachine\Exception\InvalidInput;
+use Daikon\StateMachine\Exception\InvalidOutput;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\OutputInterface;
 use Shrink0r\PhpSchema\Error;

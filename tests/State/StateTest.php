@@ -74,7 +74,7 @@ final class StateTest extends TestCase
     }
 
     /**
-     * @expectedException Daikon\StateMachine\Error\ConfigError
+     * @expectedException Daikon\StateMachine\Exception\ConfigException
      * @expectedExceptionMessage Trying to configure state 'foobar' without required setting 'foobar'.
      */
     public function testMissingRequiredSetting()

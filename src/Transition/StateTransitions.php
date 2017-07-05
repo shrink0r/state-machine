@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\StateMachine\Transition;
 
 use Countable;
-use Daikon\StateMachine\Error\InvalidStructure;
+use Daikon\StateMachine\Exception\InvalidStructure;
 use Daikon\StateMachine\State\StateInterface;
 use Daikon\StateMachine\State\StateMap;
 use Daikon\StateMachine\State\StateSet;

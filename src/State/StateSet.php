@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Daikon\StateMachine\State;
 
 use Countable;
-use Daikon\StateMachine\Error\InvalidStructure;
+use Daikon\StateMachine\Exception\InvalidStructure;
 use Ds\Set;
 use IteratorAggregate;
 use Traversable;

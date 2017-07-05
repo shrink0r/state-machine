@@ -36,7 +36,7 @@ final class ArrayStateMachineBuilderTest extends TestCase
     }
 
     /**
-     * @expectedException Daikon\StateMachine\Error\ConfigError
+     * @expectedException Daikon\StateMachine\Exception\ConfigException
      */
     public function testEmptyConfig()
     {
@@ -44,7 +44,7 @@ final class ArrayStateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\ConfigError
+     * @expectedException Daikon\StateMachine\Exception\ConfigException
      */
     public function testInvalidStateMachineSchema()
     {
@@ -52,7 +52,7 @@ final class ArrayStateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\ConfigError
+     * @expectedException Daikon\StateMachine\Exception\ConfigException
      * @expectedExceptionMessage
         Trying to provide custom state that isn't initial but marked as initial in config.
      */
@@ -62,7 +62,7 @@ final class ArrayStateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\ConfigError
+     * @expectedException Daikon\StateMachine\Exception\ConfigException
      * @expectedExceptionMessage
         Trying to provide custom state that isn't interactive but marked as interactive in config.
      */
@@ -72,7 +72,7 @@ final class ArrayStateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\ConfigError
+     * @expectedException Daikon\StateMachine\Exception\ConfigException
      * @expectedExceptionMessage
         Trying to provide custom state that isn't final but marked as final in config.
      */
@@ -82,7 +82,7 @@ final class ArrayStateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\MissingImplementation
+     * @expectedException Daikon\StateMachine\Exception\MissingImplementation
      */
     public function testNonImplementedState()
     {
@@ -90,7 +90,7 @@ final class ArrayStateMachineBuilderTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\MissingImplementation
+     * @expectedException Daikon\StateMachine\Exception\MissingImplementation
      */
     public function testNonImplementedTransition()
     {

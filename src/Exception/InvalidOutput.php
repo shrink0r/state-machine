@@ -8,11 +8,11 @@
 
 declare(strict_types=1);
 
-namespace Daikon\StateMachine\Error;
+namespace Daikon\StateMachine\Exception;
 
 use DomainException;
 
-class InvalidOutput extends DomainException implements ErrorInterface
+class InvalidOutput extends DomainException implements ExceptionInterface
 {
     private $validation_errors;
 

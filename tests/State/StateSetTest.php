@@ -59,7 +59,7 @@ final class StateSetTest extends TestCase
     }
 
     /**
-     * @expectedException Daikon\StateMachine\Error\InvalidStructure
+     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Trying to add more than one initial state.
      */
     public function testMultipleInitialStates()
@@ -71,7 +71,7 @@ final class StateSetTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\InvalidStructure
+     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Trying to add state as initial and final at the same time.
      */
     public function testInconsistentType()
@@ -83,7 +83,7 @@ final class StateSetTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\InvalidStructure
+     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Trying to create state-machine without an initial state.
      */
     public function testMissingInitialState()
@@ -95,7 +95,7 @@ final class StateSetTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Error\InvalidStructure
+     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Trying to create state-machine without at least one final state.
      */
     public function testMissingFinalState()

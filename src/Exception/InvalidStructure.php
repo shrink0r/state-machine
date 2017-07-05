@@ -8,11 +8,11 @@
 
 declare(strict_types=1);
 
-namespace Daikon\StateMachine\Error;
+namespace Daikon\StateMachine\Exception;
 
-use RuntimeException;
+use DomainException;
 
-class ConfigError extends RuntimeException implements ErrorInterface
+class InvalidStructure extends DomainException implements ExceptionInterface
 {
 
 }

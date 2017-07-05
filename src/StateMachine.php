@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine;
 
-use Daikon\StateMachine\Error\CorruptExecutionFlow;
-use Daikon\StateMachine\Error\ExecutionError;
+use Daikon\StateMachine\Exception\CorruptExecutionFlow;
+use Daikon\StateMachine\Exception\ExecutionException;
 use Daikon\StateMachine\Param\Input;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\Output;
@@ -98,14 +98,14 @@ final class StateMachine implements StateMachineInterface
             return $this->getInitialState();
         }
         if (!$this->states->has($stateName)) {
-            throw new ExecutionError("Trying to start state-machine execution at unknown state: ".$stateName);
+            throw new ExecutionException("Trying to start state-machine execution at unknown state: ".$stateName);
         }
         $startState = $this->states->get($stateName);
         if ($startState->isFinal()) {
-            throw new ExecutionError("Trying to (re)execute state-machine at final state: ".$stateName);
+            throw new ExecutionException("Trying to (re)execute state-machine at final state: ".$stateName);
         }
         if ($startState->isInteractive() && !$input->hasEvent()) {
-            throw new ExecutionError("Trying to resume state-machine executing without providing an event/signal.");
+            throw new ExecutionException("Trying to resume state-machine executing without providing an event/signal.");
         }
         return $startState->isInteractive()
             ? $this->activateTransition($input, Output::fromInput($startState->getName(), $input))
@@ -121,7 +121,7 @@ final class StateMachine implements StateMachineInterface
                     $nextState = $this->states->get($transition->getTo());
                     continue;
                 }
-                throw new ExecutionError(
+                throw new ExecutionException(
                     'Trying to activate more than one transition at a time. Transition: '.
                     $output->getCurrentState().' -> '.$nextState->getName().' was activated first. '.
                     'Now '.$transition->getFrom().' -> '.$transition->getTo().' is being activated too.'

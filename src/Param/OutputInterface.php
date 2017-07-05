@@ -12,16 +12,7 @@ namespace Daikon\StateMachine\Param;
 
 interface OutputInterface extends ParamHolderInterface
 {
-    /**
-     * @param string $currentState
-     * @param InputInterface $input
-     *
-     * @return self
-     */
-    public static function fromInput(string $currentState, InputInterface $input): self;
+    public static function fromInput(string $currentState, InputInterface $input): OutputInterface;
 
-    /**
-     * @return string
-     */
     public function getCurrentState(): string;
 }

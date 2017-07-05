@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\State;
 
-use Daikon\StateMachine\Error\ConfigError;
+use Daikon\StateMachine\Exception\ConfigException;
 use Daikon\StateMachine\Param\InputInterface;
 use Daikon\StateMachine\Param\Output;
 use Daikon\StateMachine\Param\OutputInterface;
@@ -39,7 +39,7 @@ trait StateTrait
         $this->expressionEngine = $expressionEngine;
         foreach ($this->getRequiredSettings() as $settingName) {
             if (!$this->settings->has($settingName)) {
-                throw new ConfigError("Trying to configure state '$name' without required setting '$settingName'.");
+                throw new ConfigException("Trying to configure state '$name' without required setting '$settingName'.");
             }
         }
     }

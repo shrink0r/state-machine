@@ -8,11 +8,11 @@
 
 declare(strict_types=1);
 
-namespace Daikon\StateMachine\Error;
+namespace Daikon\StateMachine\Exception;
 
 use RuntimeException;
 
-class ExecutionError extends RuntimeException implements ErrorInterface
+class ExecutionException extends RuntimeException implements ExceptionInterface
 {
 
 }

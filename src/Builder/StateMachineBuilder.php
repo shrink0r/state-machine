@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Builder;
 
-use Daikon\StateMachine\Error\InvalidStructure;
-use Daikon\StateMachine\Error\MissingImplementation;
-use Daikon\StateMachine\Error\UnknownState;
+use Daikon\StateMachine\Exception\InvalidStructure;
+use Daikon\StateMachine\Exception\MissingImplementation;
+use Daikon\StateMachine\Exception\UnknownState;
 use Daikon\StateMachine\State\StateInterface;
 use Daikon\StateMachine\State\StateSet;
 use Daikon\StateMachine\StateMachineInterface;

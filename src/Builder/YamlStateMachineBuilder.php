@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Daikon\StateMachine\Builder;
 
-use Daikon\StateMachine\Error\ConfigError;
+use Daikon\StateMachine\Exception\ConfigException;
 use Daikon\StateMachine\StateMachine;
 use Daikon\StateMachine\StateMachineInterface;
 use Shrink0r\Monatic\Maybe;
@@ -29,7 +29,7 @@ final class YamlStateMachineBuilder implements StateMachineBuilderInterface
     {
         $this->parser = new Parser;
         if (!is_readable($yamlFilepath)) {
-            throw new ConfigError("Trying to load non-existent state-machine definition at: $yamlFilepath");
+            throw new ConfigException("Trying to load non-existent state-machine definition at: $yamlFilepath");
         }
         $this->yamlFilepath = $yamlFilepath;
         $this->factory = $factory ?? new Factory;
@@ -40,7 +40,7 @@ final class YamlStateMachineBuilder implements StateMachineBuilderInterface
         $data = $this->parser->parse(file_get_contents($this->yamlFilepath));
         $result = (new StateMachineSchema)->validate($data);
         if ($result instanceof Error) {
-            throw new ConfigError('Invalid state-machine configuration given: '.print_r($result->unwrap(), true));
+            throw new ConfigException('Invalid state-machine configuration given: '.print_r($result->unwrap(), true));
         }
         list($states, $transitions) = $this->realizeConfig($data['states']);
         $stateMachineClass = Maybe::unit($data)->class->get() ?? StateMachine::CLASS;
