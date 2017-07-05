@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-use Workflux\Builder\YamlStateMachineBuilder;
-use Workflux\Renderer\DotGraphRenderer;
+use Daikon\StateMachine\YamlStateMachineBuilder;
+use Daikon\StateMachine\Renderer\DotGraphRenderer;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
