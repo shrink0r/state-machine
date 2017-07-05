@@ -39,11 +39,11 @@ final class StateMachine implements StateMachineInterface
 
     public function __construct(string $name, StateSet $stateSet, TransitionSet $transitionSet)
     {
-        list($initial_state, $states, $final_states) = $stateSet->splat();
+        list($initialState, $states, $finalStates) = $stateSet->splat();
         $this->name = $name;
         $this->states = $states;
-        $this->finalStates = $final_states;
-        $this->initialState = $initial_state;
+        $this->finalStates = $finalStates;
+        $this->initialState = $initialState;
         $this->stateTransitions = new StateTransitions($states, $transitionSet);
     }
 
