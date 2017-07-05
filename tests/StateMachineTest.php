@@ -87,7 +87,7 @@ final class StateMachineTest extends TestCase
     }
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\ExecutionException
+     * @expectedException \Daikon\StateMachine\Exception\ExecutionException
      */
     public function testMultipleActivatedTransitions()
     {
@@ -114,7 +114,7 @@ final class StateMachineTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\CorruptExecutionFlow
+     * @expectedException \Daikon\StateMachine\Exception\CorruptExecutionFlow
      */
     public function testInfiniteExecutionLoop()
     {
@@ -141,7 +141,7 @@ Looks like there is a loop between: approval -> published -> archive');
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\ExecutionException
+     * @expectedException \Daikon\StateMachine\Exception\ExecutionException
      * @expectedExceptionMessage Trying to (re)execute state-machine at final state: final
      */
     public function testResumeOnFinalState()
@@ -151,7 +151,7 @@ Looks like there is a loop between: approval -> published -> archive');
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\ExecutionException
+     * @expectedException \Daikon\StateMachine\Exception\ExecutionException
      * @expectedExceptionMessage Trying to start state-machine execution at unknown state: baz
      */
     public function testResumeOnUnknownState()
@@ -161,7 +161,7 @@ Looks like there is a loop between: approval -> published -> archive');
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\ExecutionException
+     * @expectedException \Daikon\StateMachine\Exception\ExecutionException
      * @expectedExceptionMessage Trying to resume state-machine executing without providing an event/signal.
      */
     public function testResumeWithoutEvent()

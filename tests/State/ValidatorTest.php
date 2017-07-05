@@ -62,7 +62,7 @@ final class ValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\InvalidInput
+     * @expectedException \Daikon\StateMachine\Exception\InvalidInput
      */
     public function testInvalidInput()
     {
@@ -77,7 +77,7 @@ final class ValidatorTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\InvalidOutput
+     * @expectedException \Daikon\StateMachine\Exception\InvalidOutput
      */
     public function testInvalidOutput()
     {

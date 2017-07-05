@@ -65,7 +65,7 @@ final class StateTransitionsTest extends TestCase
     }
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
+     * @expectedException \Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Trying to transition to unknown state: foobaz
      */
     public function testNonExistantToState()
@@ -81,7 +81,7 @@ final class StateTransitionsTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
+     * @expectedException \Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Trying to transition from unknown state: fu
      */
     public function testNonExistantFromState()
@@ -97,7 +97,7 @@ final class StateTransitionsTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
+     * @expectedException \Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Trying to transition to initial-state: initial
      */
     public function testTransitionToInitialState()
@@ -113,7 +113,7 @@ final class StateTransitionsTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
+     * @expectedException \Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Trying to transition from final-state: final
      */
     public function testTransitionFromFinalState()
@@ -130,7 +130,7 @@ final class StateTransitionsTest extends TestCase
     } // @codeCoverageIgnore
 
     /**
-     * @expectedException Daikon\StateMachine\Exception\InvalidStructure
+     * @expectedException \Daikon\StateMachine\Exception\InvalidStructure
      * @expectedExceptionMessage Not all states are properly connected.
      */
     public function testStatesNotConnected()
